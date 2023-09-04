@@ -1,9 +1,11 @@
 import { Colaborador } from "../pages/Colaborador";
 import FactCheckOutlinedIcon from '@mui/icons-material/FactCheckOutlined';
-import { Líderes } from "../pages/Líder";
+import { Lideres } from "../pages/Líder";
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
 import { Bairros } from "../pages/Bairros";
 import AddLocationOutlinedIcon from '@mui/icons-material/AddLocationOutlined';
+import { Link } from "../pages/Link";
+import AddLinkOutlinedIcon from '@mui/icons-material/AddLinkOutlined';
 
 
 export const APP_PAGES = [
@@ -15,17 +17,25 @@ export const APP_PAGES = [
         showMenu: true,
     },
     {
-        title: 'Líderes',
-        route: '/Líderes',
+        title: 'Lideres',
+        route: '/Lideres',
         icon: <PersonAddAltOutlinedIcon />,
-        component: <Líderes />,
+        component: <Lideres />,
         showMenu: true,
     },
+
     {
         title: 'Bairros',
         route: '/Bairros',
         icon: <AddLocationOutlinedIcon />,
         component: <Bairros />,
+        showMenu: true,
+    },
+    {
+        title: 'Links',
+        route: '/Links',
+        icon: <AddLinkOutlinedIcon />,
+        component: <Link />,
         showMenu: true,
     },
 ]
