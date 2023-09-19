@@ -5,15 +5,21 @@ import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 //import { ModalDelete } from '../ModalDelete/ModalDelete';
 import { table, tableContainer } from './styles';
 //import { useToken } from '../../shared/hooks/auth';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { api } from '../../utils/api';
+import { toast } from 'react-toastify';
 
 interface TableGridProps {
   rows: any[];
   columns: GridColDef[];
   onDelete?: (id: string) => void;
-  onEdit: (id: string) => void;
+  onEdit?: (id: string) => void;
   onView?: (id: string) => void;
   titleDelete?: string;
   subtitleDelete?: string;
+  setColaboradorId?: (id: string) => void;
+  handleOpenModalEdit?: () => void;
+  handleAttReq?: () => void;
 }
 export function TableGrid(props: TableGridProps) {
   const actionColumn: GridColDef[] = [
@@ -31,11 +37,32 @@ export function TableGrid(props: TableGridProps) {
             onDelete={() =>
               props.onDelete ? props.onDelete(row.id) : ''
             }></ModalDelete> */}
-          <IconButton
-            onClick={() => props.onEdit(row.id)}>
-            <EditIcon />
-          </IconButton>
-
+          {
+            props.onEdit && <IconButton
+              onClick={() => {
+                if (props.handleOpenModalEdit && props.setColaboradorId) {
+                  props.handleOpenModalEdit()
+                  props.setColaboradorId(row.id)
+                }
+              }
+              }>
+              <EditIcon />
+            </IconButton>
+          }
+          {
+            props.onDelete && <IconButton
+              onClick={() => {
+                api.delete(`api/colaborador/${row.id}`).then((res) => {
+                  toast.success("Colaborador deletado com sucesso!.")
+                  if (props.handleAttReq) {
+                    props.handleAttReq()
+                  }
+                }).catch((err) => toast.error(err.data.message))
+              }
+              }>
+              <DeleteIcon />
+            </IconButton>
+          }
         </>
       ),
     },

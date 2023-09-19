@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import { ThemeProvider } from '@emotion/react';
 import { LightTheme } from './shared/themes';
 import { AppRoutes } from './routes';
+import 'react-toastify/dist/ReactToastify.css';
 
 export function App() {
   return (
