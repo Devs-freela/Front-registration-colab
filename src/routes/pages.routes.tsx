@@ -6,6 +6,7 @@ import { Bairros } from "../pages/Bairros";
 import AddLocationOutlinedIcon from '@mui/icons-material/AddLocationOutlined';
 import { Link } from "../pages/Link";
 import AddLinkOutlinedIcon from '@mui/icons-material/AddLinkOutlined';
+import { Login } from "../pages/Login";
 
 
 export const APP_PAGES = [

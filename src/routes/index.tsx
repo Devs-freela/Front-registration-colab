@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import { DefaultLayout } from '../layouts/DefaultLayout';
 import { NotFound } from '../pages/NotFound';
 import { APP_PAGES } from './pages.routes';
+import { Login } from '../pages/Login';
 
 export function AppRoutes() {
     return (
@@ -13,6 +14,7 @@ export function AppRoutes() {
                 ))}
             </Route>
             <Route path="*" element={<NotFound />} />
+            <Route path="/login" element={<Login />} />
         </Routes>
     )
 }

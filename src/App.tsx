@@ -5,6 +5,7 @@ import { ThemeProvider } from '@emotion/react';
 import { LightTheme } from './shared/themes';
 import { AppRoutes } from './routes';
 import 'react-toastify/dist/ReactToastify.css';
+import "./reset.css"
 
 export function App() {
   return (
