@@ -6,14 +6,17 @@ import { LightTheme } from './shared/themes';
 import { AppRoutes } from './routes';
 import 'react-toastify/dist/ReactToastify.css';
 import "./reset.css"
+import { TokenProvider } from './shared/hooks/useAuth';
 
 export function App() {
   return (
     <ThemeProvider theme={LightTheme}>
-      <BrowserRouter basename='/'>
-        <ToastContainer />
-        <AppRoutes />
-      </BrowserRouter>
+      <TokenProvider>
+        <BrowserRouter basename='/'>
+          <ToastContainer />
+          <AppRoutes />
+        </BrowserRouter>
+      </TokenProvider>
     </ThemeProvider>
   );
 }

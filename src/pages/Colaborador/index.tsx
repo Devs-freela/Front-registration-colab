@@ -36,7 +36,7 @@ export function Colaborador() {
 
 
     useEffect(() => {
-        api.get("/api/colaborador").then((res) => setRows(res.data))
+        api.get("/api/colaborador/findAll?tipo=Colaborador-Comum").then((res) => setRows(res.data))
     }, [, attReq])
 
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)

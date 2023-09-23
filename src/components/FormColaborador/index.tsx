@@ -31,7 +31,7 @@ const schema = Yup.object().shape({
     tituloEleitor: Yup.string().required('Título de eleitor é obrigatório'),
     zona: Yup.string().required('Zona eleitoral é obrigatório'),
     secao: Yup.string().required('Sessão é obrigatório'),
-    faixaSalarial: Yup.string().required('Salário mínimo é obrigatório').typeError('Salário mínimo é obrigatório'),
+    faixaSalarial: Yup.number().required('Salário mínimo é obrigatório').typeError('Salário mínimo é obrigatório'),
     recebeBeneficio: Yup.boolean()
 });
 
@@ -84,8 +84,7 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                 toast.error(err.response.data.message)
             })
         } else {
-            console.log("FAZER REQUISIÇÃO DE EDIÇÃO AQUI")
-            api.put(`/api/colaborador/${idColaborador}`, data).then((res) => {
+            api.put(`/api/colaborador/update/${idColaborador}`, data).then((res) => {
                 if (handleAtt) {
                     handleAtt()
                 }
@@ -364,14 +363,14 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                                 sx={errors.faixaSalarial?.message ? inputError : { ...input, padding: 0 }}
                                 defaultValue={""}
                             >
-                                <MenuItem value={"0"}>Menos de 1 salário mínimo</MenuItem>
-                                <MenuItem value={"1"}>1 Salário mínimo</MenuItem>
-                                <MenuItem value={"2"}>2 Salários mínimo</MenuItem>
-                                <MenuItem value={"3"}>3 Salários mínimo</MenuItem>
-                                <MenuItem value={"4"}>4 Salários mínimo</MenuItem>
-                                <MenuItem value={"5"}>5 Salários mínimo</MenuItem>
-                                <MenuItem value={"6"}>6 Salários mínimo</MenuItem>
-                                <MenuItem value={"7"}>Mais de 6 salários mínimo</MenuItem>
+                                <MenuItem value={0}>Menos de 1 salário mínimo</MenuItem>
+                                <MenuItem value={1}>1 Salário mínimo</MenuItem>
+                                <MenuItem value={2}>2 Salários mínimo</MenuItem>
+                                <MenuItem value={3}>3 Salários mínimo</MenuItem>
+                                <MenuItem value={4}>4 Salários mínimo</MenuItem>
+                                <MenuItem value={5}>5 Salários mínimo</MenuItem>
+                                <MenuItem value={6}>6 Salários mínimo</MenuItem>
+                                <MenuItem value={7}>Mais de 6 salários mínimo</MenuItem>
                             </Select>
                         </FormControl>
                         <Box sx={containerSelect}>
@@ -383,6 +382,31 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                             <Typography sx={{ fontWeight: 700 }}>Sim</Typography>
                         </Box>
                     </Box>
+                    {isEdit &&
+                        <>
+                            <Typography variant='h4' component="h4" sx={{ fontSize: "20px", color: "#202B71", fontWeight: 700, marginTop: 3 }}>
+                                Alterar perfil?
+                            </Typography>
+                            <Box sx={windowWidth < winSize ? inputGroupMobile : inputGroup1}>
+                                <FormControl variant='filled'>
+                                    <InputLabel sx={{ color: "#202B71" }}>{errors.faixaSalarial?.message ?? "Perfil"}</InputLabel>
+                                    <Select
+                                        onChange={(event) => {
+                                            api.put(`api/colaborador/role/${idColaborador}?tipo=${event.target.value}`).then((res) => {
+                                                toast.success("Perfil do colaborador editado com sucesso!")
+                                            }
+                                            )
+                                        }}
+                                    >
+                                        <MenuItem value={"Colaborador-Comum"}>Colaborador</MenuItem>
+                                        <MenuItem value={"Colaborador-Cadastro"}>Usuário de cadastro</MenuItem>
+                                        <MenuItem value={"Lider"}>Líder</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Box>
+                        </>
+
+                    }
                     {loading ?
                         <Box sx={{ display: "flex", marginTop: 5, justifyContent: "end" }}>
                             <Box sx={windowWidth < winSize ? containerLoadingBtnMobile : containerLoadingBtn}>

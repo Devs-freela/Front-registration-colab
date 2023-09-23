@@ -1,9 +1,17 @@
 import axios from "axios";
 
-export const api = axios.create({
+const api = axios.create({
     baseURL: process.env.REACT_APP_PORT_PROJECT_BACKEND,
-    //headers: {
-    //    'Content-Type': 'application/json', // Cabeçalhos personalizados, se necessário
-    //    Authorization: 'Bearer YOUR_ACCESS_TOKEN', // Exemplo de autenticação com token
-    //},
 });
+
+api.interceptors.request.use(config => {
+    const accessToken = localStorage.getItem('token');
+    if (accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+
+    return config;
+});
+
+
+export { api };
