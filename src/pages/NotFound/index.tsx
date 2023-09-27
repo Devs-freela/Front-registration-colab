@@ -4,12 +4,11 @@ import { Box, Button, Container, Typography } from '@mui/material';
 
 export function NotFound() {
 
-  /*   function Logout() {
-      const cookie = new Cookies();
-      cookie.remove('@diabetico_token');
-      localStorage.removeItem('@diabetico_token');
-      window.location.href = '/';
-    } */
+  const Logout = () => {
+    localStorage.removeItem('@token');
+    window.location.href = '/login';
+  }
+
   return (
     <div>
       <Container
@@ -42,7 +41,7 @@ export function NotFound() {
             </Typography>
           </Typography>
           <Button
-            //onClick={Logout}
+            onClick={() => Logout()}
             variant="contained"
             color="secondary"
             style={{ maxWidth: '200px', marginTop: '60px', fontWeight: 'bold' }}>

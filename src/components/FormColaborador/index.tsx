@@ -11,6 +11,7 @@ import { calculateAge } from './utils/calculateAge';
 import { useParams } from 'react-router-dom';
 import { colors } from '../../shared/themes';
 import { api } from '../../utils/api';
+import { useToken } from '../../shared/hooks/useAuth';
 
 const schema = Yup.object().shape({
     nome: Yup.string().required('O nome é obrigatório'),
@@ -59,12 +60,27 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
         resolver: !isEdit ? yupResolver(schema) : yupResolver(schema),
     });
 
+    const { userId, User_Access } = useToken()
+
+    const recutador = (userAccess: string, userId: string) => {
+        if (userAccess == "Lider") {
+            return { liderId: userId }
+        } else if (userAccess == "Colaborador-Cadastro") {
+            return { recrutadorId: userId }
+        } else if (userAccess == "Administrativo") {
+            return { admId: userId }
+        }
+    }
+
+    const idRecrutador = recutador(User_Access, userId)
+
     const onSubmit = (data: any) => {
         setLoading(true)
         if (!isEdit) {
             // console.log({ ...data, liderId: id });
             api.post(`/api/colaborador`, {
-                ...data
+                ...data,
+                ...idRecrutador
             }).then((res) => {
                 if (handleAtt) {
                     handleAtt()
@@ -115,7 +131,7 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
     }, [dataNascimentoListenner])
 
     useEffect(() => {
-        if (cepListenner?.length == 8) {
+        if (cepListenner?.length == 8 && !isEdit) {
             setCeploading(true)
             axios.get(`https://brasilapi.com.br/api/cep/v2/${cepListenner}`, {
             }).then((res) => {
@@ -150,6 +166,8 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                 setValue("escolaridade", res.data.escolaridade)
                 setValue("redesSociais", res.data.redesSociais)
                 setValue("cep", res.data.cep)
+                setValue("rua", res.data.rua)
+                setValue("bairro", res.data.bairro)
                 setValue("numeroCasa", res.data.numeroCasa)
                 setValue("rg", res.data.rg)
                 setValue("orgaoExpedidor", res.data.orgaoExpedidor)
@@ -267,9 +285,8 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                                 label={errors.rua?.message ?? "Rua"}
                                 {...register("rua")}
                                 error={!!errors.rua?.message}
-                                {...(shrinkEdit ? { InputLabelProps: { shrink: true } } : {})}
                                 variant="filled"
-                                InputLabelProps={cepFind ? { shrink: true } : { shrink: false }}
+                                InputLabelProps={cepFind && !shrinkEdit ? { shrink: true } : shrinkEdit ? { shrink: true } : {}}
                                 sx={errors.rua?.message ? inputError : input}
                             />
                         }
@@ -284,7 +301,7 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                                 error={!!errors.bairro?.message}
                                 {...(shrinkEdit ? { InputLabelProps: { shrink: true } } : {})}
                                 variant="filled"
-                                InputLabelProps={cepFind ? { shrink: true } : { shrink: false }}
+                                InputLabelProps={cepFind && !shrinkEdit ? { shrink: true } : shrinkEdit ? { shrink: true } : {}}
                                 sx={errors.bairro?.message ? inputError : input}
                             />
                         }
@@ -394,6 +411,8 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                                         onChange={(event) => {
                                             api.put(`api/colaborador/role/${idColaborador}?tipo=${event.target.value}`).then((res) => {
                                                 toast.success("Perfil do colaborador editado com sucesso!")
+                                                if (handleAtt)
+                                                    handleAtt()
                                             }
                                             )
                                         }}

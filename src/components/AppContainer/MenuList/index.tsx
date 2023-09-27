@@ -25,7 +25,7 @@ export function MenuList({ open }: MenuListProps) {
 
   return (
     <List>
-      {APP_PAGES.filter(e => e.showMenu === true).map((item, index) => (
+      {APP_PAGES().filter(e => e.showMenu === true).map((item, index) => (
         <ListItem
           key={index}
           disablePadding

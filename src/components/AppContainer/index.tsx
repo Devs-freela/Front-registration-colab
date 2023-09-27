@@ -17,6 +17,8 @@ import { MenuList } from './MenuList';
 import { Content } from './Content';
 import { AppBar, ButtonStyled, Drawer, DrawerHeader } from './styles';
 import { colors } from '../../shared/themes';
+import { useNavigate } from 'react-router-dom';
+import { useToken } from '../../shared/hooks/useAuth';
 //import Cookies from 'universal-cookie';
 //import { useToken } from '../../shared/hooks/auth';
 
@@ -56,6 +58,15 @@ export function AppContainer({ children }: AppContainerProps) {
 
   const matches = useMediaQuery('(max-width:480px)');
 
+  const navigate = useNavigate()
+
+  const Logout = () => {
+    localStorage.removeItem("@token")
+    navigate("/login")
+  }
+
+  const { User_Access } = useToken()
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -87,10 +98,10 @@ export function AppContainer({ children }: AppContainerProps) {
               aria-controls="simple-menu"
               aria-haspopup="true"
               onClick={handleClick}>
-              {/*   {User_Access} */}
+              {User_Access}
             </ButtonStyled>
 
-            <Button variant="text" /* onClick={() => Logout()} */>
+            <Button variant="text" onClick={() => Logout()} >
               <LogoutIcon />
             </Button>
           </Box>

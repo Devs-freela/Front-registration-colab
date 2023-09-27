@@ -3,7 +3,7 @@ import { colors } from '../../shared/themes';
 export const tableContainer = {
   display: 'flex',
   flex: 1,
-  height: 'calc(100vh - 248px)',
+  height: 'calc(100vh - 260px)',
 };
 
 export const table = {

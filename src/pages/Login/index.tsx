@@ -38,10 +38,9 @@ export const Login = () => {
         api.post(path, data).then((res) => {
 
             toast.success("Login realizado com sucesso!")
-            localStorage.setItem("token", res.data.token)
+            localStorage.setItem("@token", res.data.token)
 
             api.post("/api/auths/verify/token", { token: res.data.token }).then((res) => {
-                console.log(res.data.sub.role)
                 if (res.data.sub.role == "PrimeiroLogin") {
                     isAdmin ? navigate("/firstLogin/adm") : navigate("/firstLogin")
                 } else {

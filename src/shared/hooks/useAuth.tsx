@@ -25,6 +25,9 @@ interface TokenContextData {
     setUserData: (value: UserProps) => void
     setUser_Access: (value: string) => void;
     tokenAccess: string;
+    userId: string
+    setUserId: (value: string) => void
+    token: string | null
 }
 
 interface TokenProviderProps {
@@ -34,32 +37,41 @@ const TokenContext = createContext<TokenContextData>({} as TokenContextData);
 
 export function TokenProvider({ children }: TokenProviderProps) {
     const [permission, setPermission] = useState(true);
-    const [token] = useState(localStorage.getItem('token'));
+    const [token] = useState(localStorage.getItem('@token'));
     const [auth, setAuth] = useState('');
     const [tokenAccess, setTokenAccess] = useState('')
     const [User_Access, setUser_Access] = useState('');
+    const [userId, setUserId] = useState("")
     const [User_data, setUserData] = useState<UserProps>({} as UserProps)
-
 
     window.onload = async function () {
         if (token)
             await Token(token)
+        else
+            if (!window.location.href.includes("login")) {
+                window.location.href = "/login"
+            }
     }
 
     useEffect(() => {
-        if (token)
+        if (token) {
             api.post("/api/auths/verify/token", { token: token }).then((res) => {
-                console.log("AUTH", res.data)
                 setUser_Access(res.data.sub.role)
+                setUserId(res.data.sub.id)
+                console.log("auth", res.data)
+            }).catch((err) => {
+                window.location.href = "/login"
             })
-    }, [token])
-
-    window.addEventListener('storage', function (e) {
-        if (e.key === 'token') {
-            window.location.href = "/login"
-            this.localStorage.clear()
         }
-    });
+    }, [])
+
+    //window.addEventListener('storage', function (e) {
+    //    if (e.key === 'token') {
+    //        window.location.href = "/login"
+    //        this.localStorage.removeItem("token")
+    //    }
+    //});
+
 
     async function Token(token: string) {
         api.post("/api/auths/verify/token", { token: token }).then((res) => {
@@ -85,7 +97,10 @@ export function TokenProvider({ children }: TokenProviderProps) {
                 User_data,
                 auth,
                 setAuth,
-                tokenAccess
+                tokenAccess,
+                userId,
+                setUserId,
+                token
             }}>
             {children}
         </TokenContext.Provider>

@@ -8,6 +8,7 @@ import { table, tableContainer } from './styles';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { api } from '../../utils/api';
 import { toast } from 'react-toastify';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 interface TableGridProps {
   rows: any[];
@@ -20,9 +21,32 @@ interface TableGridProps {
   setColaboradorId?: (id: string) => void;
   handleOpenModalEdit?: () => void;
   handleAttReq?: () => void;
+  history?: boolean
+  handleOpenHistory?: (id: string) => void
 }
 export function TableGrid(props: TableGridProps) {
-  const actionColumn: GridColDef[] = [
+  let actionColumn: GridColDef[] = [
+    {
+      field: "history",
+      headerName: " ",
+      type: 'string',
+      align: 'right',
+      editable: false,
+      renderCell: ({ row }) => (
+        <>
+          {
+            props.history &&
+            <IconButton onClick={() => {
+              if (props.handleOpenHistory) {
+                props.handleOpenHistory(row.id)
+              }
+            }}>
+              <VisibilityIcon />
+            </IconButton>
+          }
+        </>
+      )
+    },
     {
       field: 'menu',
       headerName: ' ',
@@ -67,6 +91,14 @@ export function TableGrid(props: TableGridProps) {
       ),
     },
   ];
+
+  if (!props.history) {
+    actionColumn.shift()
+  }
+
+  if (!props.history && !props.onEdit && !props.onDelete) {
+    actionColumn = []
+  }
 
   const handleOnCellClick = (params: GridCellParams) => {
     if (params.field !== 'menu' && props.onView) {
