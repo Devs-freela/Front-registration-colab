@@ -49,18 +49,18 @@ export function TokenProvider({ children }: TokenProviderProps) {
             await Token(token)
         else
             if (!window.location.href.includes("login")) {
-                window.location.href = "/login"
+                //window.location.href = "/login"
             }
     }
 
     useEffect(() => {
         if (token) {
             api.post("/api/auths/verify/token", { token: token }).then((res) => {
-                setUser_Access(res.data.sub.role)
-                setUserId(res.data.sub.id)
+                //setUser_Access(res.data.sub.role)
+                //setUserId(res.data.sub.id)
                 console.log("auth", res.data)
             }).catch((err) => {
-                window.location.href = "/login"
+                // window.location.href = "/login"
             })
         }
     }, [])
