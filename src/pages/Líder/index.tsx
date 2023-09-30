@@ -2,81 +2,15 @@ import { Typography } from "@mui/material";
 import { TableGrid } from "../../components/TableGrid";
 import { columns } from "./columns";
 import { colors } from "../../shared/themes";
+import { useEffect, useState } from "react";
+import { api } from "../../utils/api";
 
 export function Lideres() {
-    const rows = [
-        {
-            id: 1,
-            nome: 'João',
-            cpf: '123.456.789-10',
-            quemCadastrou: 'Maria',
-            DataDeCadastro: '01/01/2021',
-        },
-        {
-            id: 2,
-            nome: 'João',
-            cpf: '123.456.789-10',
-            quemCadastrou: 'Maria',
-            DataDeCadastro: '01/01/2021',
-        },
-        {
-            id: 3,
-            nome: 'João',
-            cpf: '123.456.789-10',
-            quemCadastrou: 'Maria',
-            DataDeCadastro: '01/01/2021',
-        },
-        {
-            id: 4,
-            nome: 'João',
-            cpf: '123.456.789-10',
-            quemCadastrou: 'Maria',
-            DataDeCadastro: '01/01/2021',
-        },
-        {
-            id: 5,
-            nome: 'João',
-            cpf: '123.456.789-10',
-            quemCadastrou: 'Maria',
-            DataDeCadastro: '01/01/2021',
-        },
-        {
-            id: 6,
-            nome: 'João',
-            cpf: '123.456.789-10',
-            quemCadastrou: 'Maria',
-            DataDeCadastro: '01/01/2021',
-        },
-        {
-            id: 7,
-            nome: 'João',
-            cpf: '123.456.789-10',
-            quemCadastrou: 'Maria',
-            DataDeCadastro: '01/01/2021',
-        },
-        {
-            id: 8,
-            nome: 'João',
-            cpf: '123.456.789-10',
-            quemCadastrou: 'Maria',
-            DataDeCadastro: '01/01/2021',
-        },
-        {
-            id: 9,
-            nome: 'João',
-            cpf: '123.456.789-10',
-            quemCadastrou: 'Maria',
-            DataDeCadastro: '01/01/2021',
-        },
-        {
-            id: 10,
-            nome: 'João',
-            cpf: '123.456.789-10',
-            quemCadastrou: 'Maria',
-            DataDeCadastro: '01/01/2021',
-        },
+    const [rows, setRows] = useState([])
 
-    ]
+    useEffect(() => {
+        api.get("api/lider").then((res) => setRows(res.data))
+    }, [])
 
     return (
         <>
