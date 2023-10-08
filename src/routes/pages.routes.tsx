@@ -12,6 +12,8 @@ import { UserCadastro } from "../pages/UsuárioCadastro";
 import { api } from "../utils/api";
 import { useToken } from "../shared/hooks/useAuth";
 import FormColaborator from "../components/FormColaborador";
+import GroupIcon from '@mui/icons-material/Group';
+import { Equipes } from "../pages/Equipes";
 
 export const APP_PAGES = () => {
     const { User_Access } = useToken()
@@ -43,6 +45,13 @@ export const APP_PAGES = () => {
             route: '/Bairros',
             icon: <AddLocationOutlinedIcon />,
             component: <Bairros />,
+            showMenu: User_Access == "Administrativo",
+        },
+        {
+            title: 'Equipes',
+            route: '/Equipes',
+            icon: <GroupIcon />,
+            component: <Equipes />,
             showMenu: User_Access == "Administrativo",
         },
         {

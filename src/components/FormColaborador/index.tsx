@@ -42,9 +42,10 @@ interface props {
     idColaborador?: string
     handleAtt?: () => void
     closeModal?: () => void
+    formLider?: boolean
 }
 
-function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, closeModal }: props) {
+function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, closeModal, formLider }: props) {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
     const [cepFind, setCepFind] = useState(false)
     const [cepLoading, setCeploading] = useState(false)
@@ -100,21 +101,39 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                 toast.error(err.response.data.message)
             })
         } else {
-            api.put(`/api/colaborador/update/${idColaborador}`, data).then((res) => {
-                if (handleAtt) {
-                    handleAtt()
-                }
-                setLoading(false)
-                setApiSuccess(true)
-                toast.success("Dados editados com sucesso!")
-                setTimeout(() => {
-                    setApiSuccess(false)
-                }, 3000)
-                handleCloseModal()
-            }).catch((err) => {
-                setLoading(false)
-                toast.error(err.response.data.message)
-            })
+            if (!formLider) {
+                api.put(`/api/colaborador/update/${idColaborador}`, data).then((res) => {
+                    if (handleAtt) {
+                        handleAtt()
+                    }
+                    setLoading(false)
+                    setApiSuccess(true)
+                    toast.success("Dados editados com sucesso!")
+                    setTimeout(() => {
+                        setApiSuccess(false)
+                    }, 3000)
+                    handleCloseModal()
+                }).catch((err) => {
+                    setLoading(false)
+                    toast.error(err.response.data.message)
+                })
+            } else {
+                api.put(`/api/lider/${idColaborador}`, data).then((res) => {
+                    if (handleAtt) {
+                        handleAtt()
+                    }
+                    setLoading(false)
+                    setApiSuccess(true)
+                    toast.success("Dados editados com sucesso!")
+                    setTimeout(() => {
+                        setApiSuccess(false)
+                    }, 3000)
+                    handleCloseModal()
+                }).catch((err) => {
+                    setLoading(false)
+                    toast.error(err.response.data.message)
+                })
+            }
         }
     };
 
@@ -157,7 +176,6 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
     useEffect(() => {
         if (isEdit) {
             api.get(`/api/colaborador/${idColaborador}`).then((res) => {
-                console.log(res.data)
                 setValue("nome", res.data.nome)
                 setValue("dataNascimento", new Date(res.data.dataNascimento))
                 setValue("telefone", res.data.telefone)

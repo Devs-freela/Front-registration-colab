@@ -23,6 +23,11 @@ interface TableGridProps {
   handleAttReq?: () => void;
   history?: boolean
   handleOpenHistory?: (id: string) => void
+  setSkip?: (number: number) => void
+  totalRows?: number
+  isLoading?: boolean
+  onDeleteBairro?: () => void
+  onDeleteLider?: () => void
 }
 export function TableGrid(props: TableGridProps) {
   let actionColumn: GridColDef[] = [
@@ -81,7 +86,35 @@ export function TableGrid(props: TableGridProps) {
                   if (props.handleAttReq) {
                     props.handleAttReq()
                   }
-                }).catch((err) => toast.error(err.data.message))
+                }).catch((err) => toast.error(err.response.data.message))
+              }
+              }>
+              <DeleteIcon />
+            </IconButton>
+          }
+          {
+            props.onDeleteBairro && <IconButton
+              onClick={() => {
+                api.delete(`api/bairro/${row.id}`).then((res) => {
+                  toast.success("Bairro deletado com sucesso!.")
+                  if (props.handleAttReq) {
+                    props.handleAttReq()
+                  }
+                }).catch((err) => toast.error(err.response.data.message))
+              }
+              }>
+              <DeleteIcon />
+            </IconButton>
+          }
+          {
+            props.onDeleteLider && <IconButton
+              onClick={() => {
+                api.delete(`api/lider/${row.id}`).then((res) => {
+                  toast.success("Líder deletado com sucesso!.")
+                  if (props.handleAttReq) {
+                    props.handleAttReq()
+                  }
+                }).catch((err) => toast.error(err.response.data.message))
               }
               }>
               <DeleteIcon />
@@ -111,6 +144,7 @@ export function TableGrid(props: TableGridProps) {
   return (
     <Box sx={tableContainer}>
       <DataGrid
+        onPaginationModelChange={(e) => props.setSkip && props.setSkip(e.page * e.pageSize)}
         rows={props.rows}
         columns={columns.map((column: GridColDef) => ({
           ...column,
@@ -127,7 +161,10 @@ export function TableGrid(props: TableGridProps) {
             },
           },
         }}
+        paginationMode="server"
         pageSizeOptions={[5]}
+        loading={props.isLoading !== undefined ? props.isLoading : false}
+        rowCount={props.totalRows && props.totalRows}
         onCellClick={handleOnCellClick}
         sx={table}
       />

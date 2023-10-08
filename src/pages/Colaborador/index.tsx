@@ -18,6 +18,10 @@ export function Colaborador() {
     const [openModalEdit, setOpenModalEdit] = useState(false)
     const [colaboradorId, setColaboradorId] = useState("")
     const [attReq, setAttReq] = useState(0)
+    const [take, setTake] = useState(10)
+    const [skip, setSkip] = useState(0)
+    const [totalRows, setTotalRows] = useState()
+    const [isLoading, setIsLoading] = useState(true)
 
     const handleOpenModal = () => {
         setOpenModal(true);
@@ -52,21 +56,21 @@ export function Colaborador() {
             api.post("/api/auths/verify/token", { token: localStorage.getItem("@token") }).then((res) => {
                 setUser_Access(res.data.sub.role)
                 setUserId(res.data.sub.id)
-                console.log("auth", res.data)
             }).catch((err) => {
-                window.location.href = "/login"
+                //window.location.href = "/login"
             })
         }
     }, [])
 
     useEffect(() => {
-        api.get("/api/colaborador/findAll?tipo=Colaborador-Comum").then((res) => setRows(res.data))
-    }, [])
+        setIsLoading(true)
+        api.get(`/api/colaborador/findAll?tipo=Colaborador-Comum&skip=${skip}&take=${take}`).then((res) => { setRows(res.data.items); setTotalRows(res.data.total); setIsLoading(false) })
+    }, [, skip])
 
     useEffect(() => {
         if (attReq != 0)
-            api.get("/api/colaborador/findAll?tipo=Colaborador-Comum").then((res) => setRows(res.data))
-
+            setIsLoading(true)
+        api.get(`/api/colaborador/findAll?tipo=Colaborador-Comum&skip=${skip}&take=${take}`).then((res) => { setRows(res.data.items); setTotalRows(res.data.total); setIsLoading(false) })
     }, [attReq])
 
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
@@ -171,6 +175,9 @@ export function Colaborador() {
                 onDelete={() => { }}
                 setColaboradorId={setColaboradorId}
                 handleAttReq={handleAtt}
+                setSkip={setSkip}
+                totalRows={totalRows}
+                isLoading={isLoading}
             />
             <Dialog open={openModal} onClose={handleCloseModal} maxWidth={"lg"}>
                 <FormColaborator handleCloseModal={handleCloseModal} handleAtt={handleAtt} closeModal={handleCloseModal} />

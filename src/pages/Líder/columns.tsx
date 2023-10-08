@@ -11,11 +11,11 @@ export const columns: GridColDef[] = [
         headerName: 'CPF',
     },
     {
-        field: 'quemCadastrou',
-        headerName: 'QUEM CADASTROU',
+        field: 'telefone',
+        headerName: 'TELEFONE',
     },
     {
-        field: 'DataDeCadastro',
-        headerName: 'DATA DE CADASTRO',
+        field: 'bairro',
+        headerName: 'BAIRRO DE ATUAÇÃO',
     },
 ];

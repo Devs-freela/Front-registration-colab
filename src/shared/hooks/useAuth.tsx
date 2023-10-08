@@ -74,7 +74,6 @@ export function TokenProvider({ children }: TokenProviderProps) {
 
     async function Token(token: string) {
         api.post("/api/auths/verify/token", { token: token }).then((res) => {
-            console.log("AUTH", res.data)
             setUser_Access(res.data.sub.role)
             //if (res.data.sub.role == "PrimeiroLogin") {
             //    isAdmin ? navigate("/firstLogin/adm") : navigate("/firstLogin")
