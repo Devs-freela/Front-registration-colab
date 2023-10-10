@@ -49,10 +49,19 @@ export const RedefinePassword = () => {
 
     const handleRedefinePassword = (data: any) => {
         const path = isAdmin ? "/api/adm/first-login" : "/api/colaborador/first-login"
-        console.log(data)
+
         api.put(path, data).then((res) => {
             toast.success("Senha redefinida com sucesso!")
-            navigate("/")
+            api.post("/api/auths/verify/token", { token: res.data.token }).then((res) => {
+                if (res.data.sub.role == "Lider") {
+                    navigate("/Links")
+                } else if (res.data.sub.role == "Colaborador-Cadastro") {
+                    navigate("/Cadastro")
+                } else {
+                    navigate("/")
+                }
+
+            })
         }
         ).catch((err) => {
             toast.error(err.response.data.message)

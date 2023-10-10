@@ -11,6 +11,7 @@ import { useState } from "react"
 import { Visibility, VisibilityOff } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify"
+import { useToken } from "../../shared/hooks/useAuth"
 
 const schema = Yup.object().shape({
     email: Yup.string().email().required('O Email é obrigatório'),
@@ -32,6 +33,8 @@ export const Login = () => {
         event.preventDefault();
     };
 
+    const { setUser_Access } = useToken()
+
     const handleLogin = (data: any) => {
         const path = isAdmin ? "/api/auths/login" : "/api/auths/login/colaborador"
 
@@ -41,8 +44,13 @@ export const Login = () => {
             localStorage.setItem("@token", res.data.token)
 
             api.post("/api/auths/verify/token", { token: res.data.token }).then((res) => {
+                setUser_Access(res.data.sub.role)
                 if (res.data.sub.role == "PrimeiroLogin") {
                     isAdmin ? navigate("/firstLogin/adm") : navigate("/firstLogin")
+                } else if (res.data.sub.role == "Lider") {
+                    navigate("/Links")
+                } else if (res.data.sub.role == "Colaborador-Cadastro") {
+                    navigate("/Cadastro")
                 } else {
                     navigate("/")
                 }
@@ -94,7 +102,10 @@ export const Login = () => {
                                 }
                             />
                         </FormControl>
-                        <Box sx={{ width: "100%", marginTop: "65px", display: "flex", justifyContent: "end" }}>
+                        <>
+                            {isAdmin ? <Button onClick={() => navigate("/login")}>Fazer login como colaborador</Button> : <Button onClick={() => navigate("/login/adm")}>Fazer login como administrador</Button>}
+                        </>
+                        <Box sx={{ width: "100%", display: "flex", justifyContent: "end" }}>
                             <Button variant='contained' type='submit' sx={{ ...button }} >{"Entrar"}</Button>
                         </Box>
                     </Box>

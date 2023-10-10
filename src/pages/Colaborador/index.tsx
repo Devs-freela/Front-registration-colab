@@ -79,14 +79,20 @@ export function Colaborador() {
                 setUser_Access(res.data.sub.role)
                 setUserId(res.data.sub.id)
             }).catch((err) => {
-                //window.location.href = "/login"
+                window.location.href = "/login"
+                localStorage.removeItem("@token")
             })
         }
     }, [])
 
     useEffect(() => {
         setIsLoading(true)
-        api.get(`/api/colaborador/findAll?tipo=Colaborador-Comum&skip=${skip}&take=${take}`).then((res) => { setRows(res.data.items); setTotalRows(res.data.total); setIsLoading(false) })
+        api.get(`/api/colaborador/findAll?tipo=Colaborador-Comum&skip=${skip}&take=${take}`).then((res) => { setRows(res.data.items); setTotalRows(res.data.total); setIsLoading(false) }).catch((err) => {
+            if (err.response.data.statusCode == 401) {
+                window.location.href = "/login"
+                localStorage.removeItem("@token")
+            }
+        })
     }, [, skip])
 
     useEffect(() => {
