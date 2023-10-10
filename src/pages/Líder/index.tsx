@@ -11,18 +11,26 @@ export function Lideres() {
     const [openModalEdit, setOpenModalEdit] = useState(false)
     const [liderId, setLiderId] = useState("")
     const [attReq, setAttReq] = useState(0)
+    const [isLoading, setIsLoading] = useState(true)
 
     const handleAtt = () => {
         setAttReq(attReq + 1)
     }
 
     useEffect(() => {
-        api.get("api/lider").then((res) => setRows(res.data))
+        api.get("api/lider").then((res) => {
+            setRows(res.data)
+            setIsLoading(false)
+        })
     }, [])
 
     useEffect(() => {
         if (attReq != 0)
-            api.get("api/lider").then((res) => setRows(res.data))
+            setIsLoading(true)
+        api.get("api/lider").then((res) => {
+            setRows(res.data)
+            setIsLoading(false)
+        })
     }, [attReq])
 
     const handleOpenModalEdit = () => {
@@ -42,6 +50,7 @@ export function Lideres() {
                 rows={rows}
                 columns={columns}
                 onEdit={() => { }}
+                isLoading={isLoading}
                 onDeleteLider={() => { }}
                 handleOpenModalEdit={handleOpenModalEdit}
                 setColaboradorId={setLiderId}
