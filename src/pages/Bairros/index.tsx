@@ -29,7 +29,7 @@ export function Bairros() {
     const [winSize] = useState(600)
     const [isEdit, setIsEdit] = useState(false)
     const [bairroId, setBairroId] = useState("")
-
+    const [rowsFiltered, setRowsFiltered] = useState([])
     window.addEventListener("resize", () => setWindowWidth(window.innerWidth))
 
     const { register, handleSubmit, reset, setValue, formState: { errors }, watch } = useForm({
@@ -76,7 +76,7 @@ export function Bairros() {
     const columns: GridColDef[] = [
         {
             field: 'nome',
-            headerName: 'NOME DP BAIRRO',
+            headerName: 'NOME DO BAIRRO',
         },
 
         {
@@ -111,6 +111,21 @@ export function Bairros() {
         if (bairroId != "")
             api.get(`api/bairro/${bairroId}`).then((res) => { setValue("nome", res.data.nome); setValue("zona", res.data.zona) })
     }, [bairroId])
+
+    const handleSearch = () => {
+        const filter = rows.filter((item) => String(item[column]).toLowerCase().includes(String(search).toLowerCase()))
+
+        if (filter.length == 0) {
+            toast.error(`Nenhum resultado encontrado para a pesquisa pelo(a) ${column} ${search}`)
+        }
+        setRowsFiltered(filter)
+    }
+
+    const handleClear = () => {
+        setColumn("")
+        setSearch("")
+        setRowsFiltered([])
+    }
 
     return (
         <>
@@ -147,10 +162,10 @@ export function Bairros() {
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
-                                        <IconButton aria-label="search" onClick={() => alert("fazer função")}>
+                                        <IconButton aria-label="search" onClick={() => handleSearch()}>
                                             <SearchIcon />
                                         </IconButton>
-                                        <IconButton aria-label="delete" onClick={() => alert("fazer função")}>
+                                        <IconButton aria-label="delete" onClick={() => handleClear()}>
                                             <CloseIcon />
                                         </IconButton>
                                     </InputAdornment>
@@ -162,7 +177,7 @@ export function Bairros() {
                 </Box>
             </Box>
             <TableGrid
-                rows={rows}
+                rows={rowsFiltered.length > 0 ? rowsFiltered : rows}
                 columns={columns}
                 handleOpenModalEdit={handleOpenModalEdit}
                 onEdit={() => { }}

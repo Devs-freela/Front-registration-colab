@@ -10,6 +10,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import { toast } from "react-toastify";
 import { useToken } from "../../shared/hooks/useAuth";
+import axios from "axios";
+import { saveAs } from 'file-saver';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export function Colaborador() {
     const [rows, setRows] = useState([])
@@ -22,6 +25,7 @@ export function Colaborador() {
     const [skip, setSkip] = useState(0)
     const [totalRows, setTotalRows] = useState()
     const [isLoading, setIsLoading] = useState(true)
+    const [fetchFile, setFetchFile] = useState(false)
 
     const handleOpenModal = () => {
         setOpenModal(true);
@@ -45,7 +49,25 @@ export function Colaborador() {
 
     const handleExport = (tipo: string) => {
         if (tipo) {
-            api.get(`api/colaborador/download/file?tipo=${tipo}`)
+            //  api.get(`api/colaborador/download/file?tipo=${tipo}`,).then((res) => res.data)
+            const accessToken = localStorage.getItem('@token');
+            setFetchFile(true)
+            axios({
+                url: `${process.env.REACT_APP_PORT_PROJECT_BACKEND}/api/colaborador/download/file?tipo=${tipo}`,
+                method: 'GET',
+                responseType: 'blob',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            }).then((res) => {
+                const blob = new Blob([res.data])
+                setFetchFile(false)
+                saveAs(blob, `colaboradores_${new Date().toLocaleDateString()}.xlsx`)
+                toast.success("Arquivo esportado com sucesso")
+            }).catch((err) => {
+                setFetchFile(false)
+                toast.error(err.response.data.message)
+            })
         }
     }
 
@@ -163,7 +185,11 @@ export function Colaborador() {
                             }}
                         />
                     </>
-                    <Button variant="contained" onClick={() => handleExport("Colaborador-Comum")} sx={{ backgroundColor: colors.primary_light, color: colors.primary_base, fontWeight: 600, '&:hover': { backgroundColor: colors.neutral_base, } }}>EXPORTAR</Button>
+                    {fetchFile ?
+                        <Button variant="contained" disabled onClick={() => handleExport("Colaborador-Comum")} sx={{ backgroundColor: colors.primary_light, color: colors.primary_base, fontWeight: 600, '&:hover': { backgroundColor: colors.neutral_base, } }}><CircularProgress size={20} /></Button>
+                        :
+                        <Button variant="contained" onClick={() => handleExport("Colaborador-Comum")} sx={{ backgroundColor: colors.primary_light, color: colors.primary_base, fontWeight: 600, '&:hover': { backgroundColor: colors.neutral_base, } }}>EXPORTAR</Button>
+                    }
                     <Button variant="contained" onClick={handleOpenModal} sx={{ backgroundColor: colors.primary_lightest, color: colors.primary_base, fontWeight: 600, '&:hover': { backgroundColor: '#c9b047', } }}>NOVO COLABORADOR</Button>
                 </Box>
             </Box>

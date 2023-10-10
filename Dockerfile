@@ -6,8 +6,7 @@ COPY . .
 
 RUN yarn install
 
-#RUN yarn start
-
+#RUN yarn build
 
 FROM nginx:1.16.0-alpine
 
