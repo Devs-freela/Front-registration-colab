@@ -14,6 +14,7 @@ import { useToken } from "../shared/hooks/useAuth";
 import FormColaborator from "../components/FormColaborador";
 import GroupIcon from '@mui/icons-material/Group';
 import { Equipes } from "../pages/Equipes";
+import FormColaboratorRegister from "../components/FormUserCadastro";
 
 export const APP_PAGES = () => {
     const { User_Access } = useToken()
@@ -65,7 +66,7 @@ export const APP_PAGES = () => {
             title: 'Cadastro',
             route: '/Cadastro',
             icon: <FactCheckOutlinedIcon />,
-            component: <FormColaborator handleCloseModal={() => { }} />,
+            component: <FormColaboratorRegister handleCloseModal={() => { }} />,
             showMenu: User_Access != "Lider",
         },
     ];
