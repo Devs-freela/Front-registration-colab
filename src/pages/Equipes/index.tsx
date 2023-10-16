@@ -415,8 +415,8 @@ export function Equipes() {
                                                 <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between" }}>
                                                     <Box sx={{ display: "flex", padding: "10px 0px" }}>
                                                         <Typography sx={{ marginLeft: "50px" }}>{row.nome}</Typography>
-                                                        <Typography sx={{ marginLeft: "100px" }}>{row.bairro.nome}</Typography>
-                                                        <Typography sx={{ marginLeft: "100px" }}>{row.lider.nome}</Typography>
+                                                        <Typography sx={{ marginLeft: "100px" }}>{row.bairro?.nome}</Typography>
+                                                        <Typography sx={{ marginLeft: "100px" }}>{row.lider?.nome ?? "Equipe sem lider"}</Typography>
                                                     </Box>
                                                     <Box>
                                                         <IconButton
@@ -567,7 +567,7 @@ export function Equipes() {
                                             }}
                                             key={item.id}
                                         >
-                                            {`${item.nome}`}
+                                            {`${item?.nome}`}
                                             <IconButton onClick={() => DeleteValueFromArray(item)}>
                                                 <DeleteIcon color="primary" />
                                             </IconButton>
@@ -640,7 +640,7 @@ export function Equipes() {
                                 defaultValue={equipSelected?.lider.id}
                             >
                                 {lideres.map((lider: any) => (
-                                    <MenuItem value={lider.id}>{lider.nome}</MenuItem>
+                                    <MenuItem value={lider.id}>{lider?.nome}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>
@@ -649,7 +649,7 @@ export function Equipes() {
                             id="combo-box-demo"
                             options={colaboradores}
                             getOptionLabel={(option) =>
-                                `${option.nome}`
+                                `${option?.nome}`
                             }
                             sx={{ gridColumn: "1 / 3" }}
                             isOptionEqualToValue={(Option: any, value: any) =>

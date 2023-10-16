@@ -173,11 +173,25 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
         }
     }, [cepListenner])
 
+    function formatarData(data: string) {
+        const dataObj = new Date(data);
+        const ano = dataObj.getFullYear();
+        const mes = (dataObj.getMonth() + 1).toString().padStart(2, '0');
+        const dia = dataObj.getDate().toString().padStart(2, '0');
+
+        return `${ano}-${mes}-${dia}`;
+    }
+
+    const [faixaSalarialDefault, setFaixaSalarialDefault] = useState<number>()
+    const [recebeBeneficio, setRecebeBeneficio] = useState(false)
+
+    const [loadingEdit, setLoadingEdit] = useState(false)
     useEffect(() => {
         if (isEdit) {
+            setLoadingEdit(true)
             api.get(`/api/colaborador/${idColaborador}`).then((res) => {
                 setValue("nome", res.data.nome)
-                setValue("dataNascimento", new Date(res.data.dataNascimento))
+                setValue("dataNascimento", formatarData(res.data.dataNascimento) as unknown as Date)
                 setValue("telefone", res.data.telefone)
                 setValue("email", res.data.email)
                 setValue("profissao", res.data.profissao)
@@ -195,13 +209,16 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                 setValue("zona", res.data.zona)
                 setValue("faixaSalarial", res.data.faixaSalarial)
                 setValue("recebeBeneficio", res.data.recebeBeneficio)
+                setFaixaSalarialDefault(res.data.faixaSalarial)
+                setRecebeBeneficio(res.data.recebeBeneficio)
                 setShrinkEdit(true)
+                setLoadingEdit(false)
             })
         }
     }, [])
 
 
-    return (
+    return loadingEdit ? <Box sx={container}><CircularProgress /></Box> : (
         <Box sx={body}>
             <Box sx={container}>
                 <Typography variant="h2" component="h2" sx={title}>
@@ -396,7 +413,7 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                                 {...register("faixaSalarial")}
                                 error={!!errors.faixaSalarial?.message}
                                 sx={errors.faixaSalarial?.message ? inputError : { ...input, padding: 0 }}
-                                defaultValue={""}
+                                defaultValue={isEdit ? faixaSalarialDefault : ""}
                             >
                                 <MenuItem value={0}>Menos de 1 salário mínimo</MenuItem>
                                 <MenuItem value={1}>1 Salário mínimo</MenuItem>
@@ -412,6 +429,8 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                             <Typography>Recebe algum benefício?</Typography>
                             <Typography sx={{ marginLeft: "20px", fontWeight: 700 }}>Não</Typography>
                             <Switch
+                                defaultChecked={recebeBeneficio}
+                                color='info'
                                 {...register("recebeBeneficio")}
                             />
                             <Typography sx={{ fontWeight: 700 }}>Sim</Typography>
