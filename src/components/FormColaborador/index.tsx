@@ -184,12 +184,13 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
 
     const [faixaSalarialDefault, setFaixaSalarialDefault] = useState<number>()
     const [recebeBeneficio, setRecebeBeneficio] = useState(false)
-
+    const [userRole, setUserRoles] = useState()
     const [loadingEdit, setLoadingEdit] = useState(false)
     useEffect(() => {
         if (isEdit) {
             setLoadingEdit(true)
             api.get(`/api/colaborador/${idColaborador}`).then((res) => {
+                setUserRoles(res.data.role?.name)
                 setValue("nome", res.data.nome)
                 setValue("dataNascimento", formatarData(res.data.dataNascimento) as unknown as Date)
                 setValue("telefone", res.data.telefone)
@@ -445,6 +446,7 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                                 <FormControl variant='filled'>
                                     <InputLabel sx={{ color: "#202B71" }}>{errors.faixaSalarial?.message ?? "Perfil"}</InputLabel>
                                     <Select
+                                        defaultValue={userRole}
                                         onChange={(event) => {
                                             api.put(`api/colaborador/role/${idColaborador}?tipo=${event.target.value}`).then((res) => {
                                                 toast.success("Perfil do colaborador editado com sucesso!")

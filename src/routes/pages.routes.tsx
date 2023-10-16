@@ -73,6 +73,10 @@ export const APP_PAGES = () => {
                 showMenu: User_Access != "Lider",
             },
         ];
+    } else {
+        if (!window.location.href.includes("login")) {
+            window.location.href = "/login"
+        }
     }
 
     // if (process.env.NODE_ENV == "development") {

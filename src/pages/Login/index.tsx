@@ -103,6 +103,7 @@ export const Login = () => {
                             />
                         </FormControl>
                         <>
+                            {/* {isAdmin ? <Button onClick={() => navigate("/login")}>Fazer login como colaborador</Button> : <Button onClick={() => navigate("/login/adm")}>Fazer login como administrador</Button>} */}
                         </>
                         <Box sx={{ width: "100%", display: "flex", justifyContent: "end" }}>
                             <Button variant='contained' type='submit' sx={{ ...button }} >{"Entrar"}</Button>
