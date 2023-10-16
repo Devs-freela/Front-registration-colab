@@ -36,7 +36,7 @@ export const Login = () => {
     const { setUser_Access } = useToken()
 
     const handleLogin = (data: any) => {
-        const path = isAdmin ? "/api/auths/login" : "/api/auths/login/colaborador"
+        const path = "/api/auths/login"
 
         api.post(path, data).then((res) => {
 
@@ -103,7 +103,6 @@ export const Login = () => {
                             />
                         </FormControl>
                         <>
-                            {isAdmin ? <Button onClick={() => navigate("/login")}>Fazer login como colaborador</Button> : <Button onClick={() => navigate("/login/adm")}>Fazer login como administrador</Button>}
                         </>
                         <Box sx={{ width: "100%", display: "flex", justifyContent: "end" }}>
                             <Button variant='contained' type='submit' sx={{ ...button }} >{"Entrar"}</Button>
