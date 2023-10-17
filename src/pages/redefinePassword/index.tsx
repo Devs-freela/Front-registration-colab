@@ -48,11 +48,12 @@ export const RedefinePassword = () => {
     const isAdmin = currentPathname.includes('/adm');
 
     const handleRedefinePassword = (data: any) => {
-        const path = isAdmin ? "/api/adm/first-login" : "/api/colaborador/first-login"
+        const path = "/api/adm/first-login"
 
         api.put(path, data).then((res) => {
             toast.success("Senha redefinida com sucesso!")
             api.post("/api/auths/verify/token", { token: res.data.token }).then((res) => {
+                localStorage.setItem("@token", res.data.token)
                 if (res.data.sub.role == "Lider") {
                     navigate("/Links")
                 } else if (res.data.sub.role == "Colaborador-Cadastro") {
