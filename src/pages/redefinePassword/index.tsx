@@ -48,7 +48,7 @@ export const RedefinePassword = () => {
     const isAdmin = currentPathname.includes('/adm');
 
     const handleRedefinePassword = (data: any) => {
-        const path = "/api/adm/first-login"
+        const path = "/api/colaborador/first-login"
 
         api.put(path, data).then((res) => {
             toast.success("Senha redefinida com sucesso!")
