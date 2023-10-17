@@ -21,7 +21,7 @@ export const APP_PAGES = () => {
     const { User_Access } = useToken()
     let menuItems: { title: string; route: string; icon: JSX.Element; component: JSX.Element; showMenu: boolean; }[] = []
 
-    if (User_Access != "") {
+    if (localStorage.getItem("@token")) {
         menuItems = [
             {
                 title: 'Colaborador',
@@ -74,9 +74,12 @@ export const APP_PAGES = () => {
             },
         ];
     } else {
-        if (!window.location.href.includes("login")) {
-            window.location.href = "/login"
-        }
+        console.log(localStorage.getItem("@token"))
+        setTimeout(() => {
+            if (!window.location.href.includes("login")) {
+                window.location.href = "/login"
+            }
+        }, 1000)
     }
 
     // if (process.env.NODE_ENV == "development") {

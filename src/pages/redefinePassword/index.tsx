@@ -10,6 +10,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify"
 import { containerCardLogin, containerMain } from "./styles";
+import { useToken } from "../../shared/hooks/useAuth";
 
 Yup.setLocale({
     mixed: {
@@ -47,13 +48,17 @@ export const RedefinePassword = () => {
 
     const isAdmin = currentPathname.includes('/adm');
 
+    const { setUser_Access } = useToken()
+
     const handleRedefinePassword = (data: any) => {
         const path = "/api/colaborador/first-login"
 
         api.put(path, data).then((res) => {
             toast.success("Senha redefinida com sucesso!")
+            localStorage.removeItem("@token")
+            localStorage.setItem("@token", res.data.token)
             api.post("/api/auths/verify/token", { token: res.data.token }).then((res) => {
-                localStorage.setItem("@token", res.data.token)
+                setUser_Access(res.data.sub.role)
                 if (res.data.sub.role == "Lider") {
                     navigate("/Links")
                 } else if (res.data.sub.role == "Colaborador-Cadastro") {

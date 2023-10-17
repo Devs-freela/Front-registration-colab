@@ -34,7 +34,7 @@ export const columnsHistory: GridColDef[] = [
         field: 'createdAt',
         headerName: 'DATA E HORA DO CADASTRO',
         renderCell({ row }) {
-            return new Date(row.createdAt).toLocaleDateString()
+            return new Date(row.createdAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })
         },
     },
 ]

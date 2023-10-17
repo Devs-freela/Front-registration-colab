@@ -33,7 +33,7 @@ export const Login = () => {
         event.preventDefault();
     };
 
-    const { setUser_Access } = useToken()
+    const { setUser_Access, } = useToken()
 
     const handleLogin = (data: any) => {
         const path = "/api/auths/login"
@@ -46,7 +46,7 @@ export const Login = () => {
             api.post("/api/auths/verify/token", { token: res.data.token }).then((res) => {
                 setUser_Access(res.data.sub.role)
                 if (res.data.sub.role == "PrimeiroLogin") {
-                    isAdmin ? navigate("/firstLogin/adm") : navigate("/firstLogin")
+                    navigate("/firstLogin")
                 } else if (res.data.sub.role == "Lider") {
                     navigate("/Links")
                 } else if (res.data.sub.role == "Colaborador-Cadastro") {
