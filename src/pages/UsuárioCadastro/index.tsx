@@ -12,6 +12,8 @@ import { toast } from "react-toastify";
 import { useToken } from "../../shared/hooks/useAuth";
 import { body } from "../../components/FormColaborador/styles/AppStyles";
 import { container } from "../../components/ToolbarContainer/styles";
+import axios from "axios";
+import saveAs from "file-saver";
 
 export function UserCadastro() {
     const [rows, setRows] = useState([])
@@ -50,7 +52,10 @@ export function UserCadastro() {
 
     const { User_Access } = useToken()
 
+    const [idModalHistory, setIdModalHistory] = useState<string>()
+
     const handleOpenModalHistory = (id: string) => {
+        setIdModalHistory(id)
         setOpenModalHistory(true)
         api.get(`api/colaborador/all/recrutados/${id}?tipo=Colaborador-Cadastro`).then((res) => {
             setRowsHistory(res.data)
@@ -59,12 +64,6 @@ export function UserCadastro() {
 
     const handleCloseModalHistory = () => {
         setOpenModalHistory(false)
-    }
-
-    const handleExport = (tipo: string) => {
-        if (tipo) {
-            api.get(`api/colaborador/download/file?tipo=${tipo}`)
-        }
     }
 
     useEffect(() => {
@@ -117,6 +116,31 @@ export function UserCadastro() {
         setColumn("")
         setSearch("")
         setRowsFiltered([])
+    }
+
+
+    const handleExport = (tipo: string) => {
+        if (tipo) {
+            //  api.get(`api/colaborador/download/file?tipo=${tipo}`,).then((res) => res.data)
+            const accessToken = localStorage.getItem('@token');
+            // setFetchFile(true)
+            axios({
+                url: `${process.env.REACT_APP_PORT_PROJECT_BACKEND}/api/colaborador/download/recrutados/${idModalHistory}?tipo=${tipo}`,
+                method: 'GET',
+                responseType: 'blob',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            }).then((res) => {
+                const blob = new Blob([res.data])
+                // setFetchFile(false)
+                saveAs(blob, `colaboradores_${new Date().toLocaleDateString()}.xlsx`)
+                toast.success("Arquivo esportado com sucesso")
+            }).catch((err) => {
+                // setFetchFile(false)
+                toast.error(err.response.data.message)
+            })
+        }
     }
 
     return (
@@ -200,7 +224,7 @@ export function UserCadastro() {
                                 {windowWidth < winSize ? <Button onClick={handleCloseModalHistory} sx={windowWidth < winSize ? { fontWeight: 900, width: "100%", marginBottom: "10px" } : { fontWeight: 900 }}>X</Button> : <></>}
                             </Box>
                             <Box sx={windowWidth < winSize ? { display: "flex", justifyContent: "space-between", width: "100%" } : {}} >
-                                <Button variant="contained" onClick={() => console.log("aqui")} sx={windowWidth < winSize ? { width: "90%", marginBottom: "10px", backgroundColor: colors.primary_light, color: colors.primary_base, fontWeight: 600, '&:hover': { backgroundColor: colors.neutral_base, } } : { backgroundColor: colors.primary_light, color: colors.primary_base, fontWeight: 600, '&:hover': { backgroundColor: colors.neutral_base, } }}>EXPORTAR</Button>
+                                <Button variant="contained" onClick={() => handleExport("Colaborador-Cadastro")} sx={windowWidth < winSize ? { width: "90%", marginBottom: "10px", backgroundColor: colors.primary_light, color: colors.primary_base, fontWeight: 600, '&:hover': { backgroundColor: colors.neutral_base, } } : { backgroundColor: colors.primary_light, color: colors.primary_base, fontWeight: 600, '&:hover': { backgroundColor: colors.neutral_base, } }}>EXPORTAR</Button>
                                 {windowWidth < winSize ? <></> : <Button onClick={handleCloseModalHistory} sx={windowWidth < winSize ? { fontWeight: 900, width: "100%", marginBottom: "10px" } : { fontWeight: 900 }}>X</Button>
                                 }
                             </Box>
