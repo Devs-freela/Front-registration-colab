@@ -1,8 +1,13 @@
 import { Box, IconButton, Typography } from "@mui/material";
 import FileCopyOutlinedIcon from '@mui/icons-material/FileCopyOutlined';
 import { colors } from "../../shared/themes";
+import { useToken } from "../../shared/hooks/useAuth";
 
 export function Link() {
+    const { User_Access, userId } = useToken()
+    const path = User_Access == "Administrativo" ? `https://registro-separado.vercel.app/register/adm/${userId}` : `https://registro-separado.vercel.app/register/${userId}`
+
+
     return (
         <>
             <Box sx={{ display: 'flex', justifyContent: 'center', padding: 25 }}>
@@ -23,7 +28,7 @@ export function Link() {
                     }}
                     >
                         <Typography sx={{ display: 'flex', justifyContent: 'center', ml: 3 }} >
-                            https://www.google.com
+                            {path}
                         </Typography>
                         <IconButton sx={{ mr: 3 }} >
                             <FileCopyOutlinedIcon />
