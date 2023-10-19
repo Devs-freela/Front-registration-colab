@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Box, Button, FilledInput, FormControl, IconButton, InputAdornment, InputLabel, TextField, Typography } from "@mui/material"
 import { LoginProps } from "./interfacesLogin"
 import { api } from "../../utils/api"
@@ -33,7 +34,7 @@ export const Login = () => {
         event.preventDefault();
     };
 
-    const { setUser_Access, } = useToken()
+    const { setUser_Access, setUserId } = useToken()
 
     const handleLogin = (data: any) => {
         const path = "/api/auths/login"
@@ -45,11 +46,12 @@ export const Login = () => {
 
             api.post("/api/auths/verify/token", { token: res.data.token }).then((res) => {
                 setUser_Access(res.data.sub.role)
-                if (res.data.sub.role == "PrimeiroLogin") {
+                setUserId(res.data.sub.id)
+                if (res.data.sub.role === "PrimeiroLogin") {
                     navigate("/firstLogin")
-                } else if (res.data.sub.role == "Lider") {
+                } else if (res.data.sub.role === "Lider") {
                     navigate("/Links")
-                } else if (res.data.sub.role == "Colaborador-Cadastro") {
+                } else if (res.data.sub.role === "Colaborador-Cadastro") {
                     navigate("/Cadastro")
                 } else {
                     navigate("/")

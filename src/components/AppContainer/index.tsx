@@ -32,6 +32,7 @@ export function AppContainer({ children }: AppContainerProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const data = localStorage.getItem('data');
   const user = JSON.parse(data ?? '{"result":true, "count":42}');
+  const { setUserId } = useToken()
   //const { User_Access } = useToken()
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);

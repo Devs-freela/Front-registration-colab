@@ -29,7 +29,7 @@ const schema = Yup.object().shape({
     numeroCasa: Yup.string().required('Número é obrigatório'),
     rg: Yup.string().required('RG é obrigatório'),
     orgaoExpedidor: Yup.string().required('Orgão expeditor é obrigatório'),
-    cpf: Yup.string().required('CPF é obrigatório'),
+    cpf: Yup.string().required('CPF é obrigatório').length(11, 'CPF deve conter 11 dígitos numéricos'),
     tituloEleitor: Yup.string().required('Título de eleitor é obrigatório'),
     zona: Yup.string().required('Zona eleitoral é obrigatório'),
     secao: Yup.string().required('Sessão é obrigatório'),
@@ -366,6 +366,7 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
                             {...register("cpf")}
                             error={!!errors.cpf?.message}
                             {...(shrinkEdit ? { InputLabelProps: { shrink: true } } : {})}
+                            inputProps={{ maxLength: 11 }}
                             variant="filled"
                             sx={errors.cpf?.message ? inputError : input}
                         />

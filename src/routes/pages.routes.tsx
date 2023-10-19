@@ -6,12 +6,9 @@ import { Bairros } from "../pages/Bairros";
 import AddLocationOutlinedIcon from '@mui/icons-material/AddLocationOutlined';
 import { Link } from "../pages/Link";
 import AddLinkOutlinedIcon from '@mui/icons-material/AddLinkOutlined';
-import { Login } from "../pages/Login";
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import { UserCadastro } from "../pages/UsuárioCadastro";
-import { api } from "../utils/api";
 import { useToken } from "../shared/hooks/useAuth";
-import FormColaborator from "../components/FormColaborador";
 import GroupIcon from '@mui/icons-material/Group';
 import { Equipes } from "../pages/Equipes";
 import FormColaboratorRegister from "../components/FormUserCadastro";
@@ -28,49 +25,49 @@ export const APP_PAGES = () => {
                 route: '/',
                 icon: <FactCheckOutlinedIcon />,
                 component: <Colaborador />,
-                showMenu: User_Access == "Administrativo",
+                showMenu: User_Access === "Administrativo",
             },
             {
                 title: 'Lideres',
                 route: '/Lideres',
                 icon: <PersonAddAltOutlinedIcon />,
                 component: <Lideres />,
-                showMenu: User_Access == "Administrativo",
+                showMenu: User_Access === "Administrativo",
             },
             {
                 title: 'Usuários de cadastro',
                 route: '/cadastroUser',
                 icon: <PeopleOutlineIcon />,
                 component: <UserCadastro />,
-                showMenu: User_Access == "Administrativo",
+                showMenu: User_Access === "Administrativo",
             },
             {
                 title: 'Bairros',
                 route: '/Bairros',
                 icon: <AddLocationOutlinedIcon />,
                 component: <Bairros />,
-                showMenu: User_Access == "Administrativo",
+                showMenu: User_Access === "Administrativo",
             },
             {
                 title: 'Equipes',
                 route: '/Equipes',
                 icon: <GroupIcon />,
                 component: <Equipes />,
-                showMenu: User_Access == "Administrativo",
+                showMenu: User_Access === "Administrativo",
             },
             {
                 title: 'Links',
                 route: '/Links',
                 icon: <AddLinkOutlinedIcon />,
                 component: <Link />,
-                showMenu: User_Access == "Lider" || User_Access == "Administrativo",
+                showMenu: User_Access === "Lider" || User_Access === "Administrativo",
             },
             {
                 title: 'Cadastro',
                 route: '/Cadastro',
                 icon: <FactCheckOutlinedIcon />,
                 component: <FormColaboratorRegister handleCloseModal={() => { }} />,
-                showMenu: User_Access != "Lider",
+                showMenu: User_Access !== "Lider",
             },
         ];
     } else {

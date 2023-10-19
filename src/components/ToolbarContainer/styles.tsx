@@ -14,6 +14,16 @@ export const container = {
   marginBottom: '2rem',
 };
 
+export const containerLink = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginTop: '1.5rem',
+  height: '2.5rem',
+  marginBottom: '1.5rem',
+
+};
+
 export const actions = {
   display: 'flex',
   height: 1,

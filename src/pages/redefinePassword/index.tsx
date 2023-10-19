@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Box, Button, FilledInput, FormControl, IconButton, InputAdornment, InputLabel, TextField, Typography } from "@mui/material"
 import { api } from "../../utils/api"
 import { colors } from "../../shared/themes"
@@ -59,9 +60,9 @@ export const RedefinePassword = () => {
             localStorage.setItem("@token", res.data.token)
             api.post("/api/auths/verify/token", { token: res.data.token }).then((res) => {
                 setUser_Access(res.data.sub.role)
-                if (res.data.sub.role == "Lider") {
+                if (res.data.sub.role === "Lider") {
                     navigate("/Links")
-                } else if (res.data.sub.role == "Colaborador-Cadastro") {
+                } else if (res.data.sub.role === "Colaborador-Cadastro") {
                     navigate("/Cadastro")
                 } else {
                     navigate("/")

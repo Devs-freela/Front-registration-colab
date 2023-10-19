@@ -5,7 +5,6 @@ import { NotFound } from '../pages/NotFound';
 import { Login } from '../pages/Login';
 import { RedefinePassword } from '../pages/redefinePassword';
 import { APP_PAGES } from './pages.routes';
-import FormColaborator from '../components/FormColaborador';
 
 export function AppRoutes() {
     return (

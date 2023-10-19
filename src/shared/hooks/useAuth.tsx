@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {
     createContext,
@@ -7,7 +8,7 @@ import React, {
     useState,
 } from 'react';
 import { api } from '../../utils/api';
-import { useNavigate } from 'react-router-dom';
+
 
 interface UserProps {
     name: string,
@@ -53,11 +54,14 @@ export function TokenProvider({ children }: TokenProviderProps) {
             }
     }
 
+
+
     useEffect(() => {
         if (token) {
             api.post("/api/auths/verify/token", { token: token }).then((res) => {
                 setUser_Access(res.data.sub.role)
                 setUserId(res.data.sub.id)
+                console.log(res)
             }).catch((err) => {
                 // window.location.href = "/login"
             })
@@ -75,6 +79,7 @@ export function TokenProvider({ children }: TokenProviderProps) {
     async function Token(token: string) {
         api.post("/api/auths/verify/token", { token: token }).then((res) => {
             setUser_Access(res.data.sub.role)
+            setUserId(res.data.sub.id)
             //if (res.data.sub.role == "PrimeiroLogin") {
             //    isAdmin ? navigate("/firstLogin/adm") : navigate("/firstLogin")
             //} else {
@@ -98,7 +103,7 @@ export function TokenProvider({ children }: TokenProviderProps) {
                 tokenAccess,
                 userId,
                 setUserId,
-                token
+                token,
             }}>
             {children}
         </TokenContext.Provider>
