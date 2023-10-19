@@ -1,3 +1,6 @@
+/* eslint-disable no-sparse-arrays */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Box, Button, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"
 import { TableGrid } from "../../components/TableGrid"
 import { colors } from "../../shared/themes";
@@ -88,7 +91,7 @@ export function Colaborador() {
     useEffect(() => {
         setIsLoading(true)
         api.get(`/api/colaborador/findAll?tipo=Colaborador-Comum&skip=${skip}&take=${take}`).then((res) => { setRows(res.data.items); setTotalRows(res.data.total); setIsLoading(false) }).catch((err) => {
-            if (err.response.data.statusCode == 401) {
+            if (err.response.data.statusCode === 401) {
                 window.location.href = "/login"
                 localStorage.removeItem("@token")
             }
@@ -96,7 +99,7 @@ export function Colaborador() {
     }, [, skip])
 
     useEffect(() => {
-        if (attReq != 0)
+        if (attReq !== 0)
             setIsLoading(true)
         api.get(`/api/colaborador/findAll?tipo=Colaborador-Comum&skip=${skip}&take=${take}`).then((res) => { setRows(res.data.items); setTotalRows(res.data.total); setIsLoading(false) })
     }, [attReq])
@@ -133,7 +136,7 @@ export function Colaborador() {
 
     const handleSearch = () => {
         const filter = rows.filter((item) => String(item[column]).toLowerCase().includes(String(search).toLowerCase()))
-        if (filter.length == 0) {
+        if (filter.length === 0) {
             toast.error(`Nenhum resultado encontrado para a pesquisa pelo(a) ${column} ${search}`)
         }
         setRowsFiltered(filter)
@@ -148,7 +151,7 @@ export function Colaborador() {
     return (
         <>
             <Box sx={windowWidth > 600 ? { display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3, mt: 2 } : { display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3, mt: 2, flexDirection: "column" }}>
-                <Typography variant="h5" sx={{ fontWeight: 600, color: colors.primary_base, fontSize: '24px' }}>
+                <Typography variant="h5" sx={{ fontWeight: 600, color: colors.primary_base, fontSize: '24px', marginLeft: '5px' }}>
                     Colaboradores
                 </Typography>
                 <Box sx={windowWidth > 600 ? { gap: "10px", display: "flex" } : { gap: "10px", display: "flex", flexDirection: "column" }}>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Button, Dialog, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { colors } from "../../shared/themes";
 import { useEffect, useState } from "react";
@@ -7,7 +8,7 @@ import { api } from "../../utils/api";
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import * as Yup from 'yup';
-import { button, buttonMobile, input, inputError, inputGroup1, inputGroupMobile } from "../../components/FormColaborador/styles/AppStyles";
+import { button, buttonMobile, input, inputError } from "../../components/FormColaborador/styles/AppStyles";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
@@ -32,7 +33,7 @@ export function Bairros() {
     const [rowsFiltered, setRowsFiltered] = useState([])
     window.addEventListener("resize", () => setWindowWidth(window.innerWidth))
 
-    const { register, handleSubmit, reset, setValue, formState: { errors }, watch } = useForm({
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
     });
 
@@ -102,20 +103,20 @@ export function Bairros() {
     }, [])
 
     useEffect(() => {
-        if (attReq != 0)
+        if (attReq !== 0)
             setIsLoading(true)
         api.get("api/bairro").then((res) => { setRows(res.data); setIsLoading(false) })
     }, [attReq])
 
     useEffect(() => {
-        if (bairroId != "")
+        if (bairroId !== "")
             api.get(`api/bairro/${bairroId}`).then((res) => { setValue("nome", res.data.nome); setValue("zona", res.data.zona) })
     }, [bairroId])
 
     const handleSearch = () => {
         const filter = rows.filter((item) => String(item[column]).toLowerCase().includes(String(search).toLowerCase()))
 
-        if (filter.length == 0) {
+        if (filter.length === 0) {
             toast.error(`Nenhum resultado encontrado para a pesquisa pelo(a) ${column} ${search}`)
         }
         setRowsFiltered(filter)
@@ -130,7 +131,7 @@ export function Bairros() {
     return (
         <>
             <Box sx={windowWidth > 600 ? { display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3, mt: 2 } : { display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3, mt: 2, flexDirection: "column" }}>
-                <Typography variant="h5" sx={{ fontWeight: 600, color: colors.primary_base, fontSize: '24px', }}>
+                <Typography variant="h5" sx={{ fontWeight: 600, color: colors.primary_base, fontSize: '24px', marginLeft: '5px' }}>
                     Bairros
                 </Typography>
                 <Box sx={windowWidth > 600 ? { gap: "10px", display: "flex" } : { gap: "10px", display: "flex", flexDirection: "column" }}>

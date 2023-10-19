@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-sparse-arrays */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Button, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"
 import { TableGrid } from "../../components/TableGrid"
 import { colors } from "../../shared/themes";
@@ -9,9 +12,6 @@ import { api } from "../../utils/api";
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import { toast } from "react-toastify";
-import { useToken } from "../../shared/hooks/useAuth";
-import { body } from "../../components/FormColaborador/styles/AppStyles";
-import { container } from "../../components/ToolbarContainer/styles";
 import axios from "axios";
 import saveAs from "file-saver";
 
@@ -30,10 +30,6 @@ export function UserCadastro() {
     const [totalRows, setTotalRows] = useState()
     const [isLoading, setIsLoading] = useState(true)
 
-    const handleOpenModal = () => {
-        setOpenModal(true);
-    };
-
     const handleCloseModal = () => {
         setOpenModal(false);
     };
@@ -49,8 +45,6 @@ export function UserCadastro() {
     const handleAtt = () => {
         setAttReq(attReq + 1)
     }
-
-    const { User_Access } = useToken()
 
     const [idModalHistory, setIdModalHistory] = useState<string>()
 
@@ -72,7 +66,7 @@ export function UserCadastro() {
     }, [, skip])
 
     useEffect(() => {
-        if (attReq != 0)
+        if (attReq !== 0)
             setIsLoading(true)
 
         api.get(`/api/colaborador/findAll?tipo=Colaborador-Cadastro&skip=${skip}&take=${take}`).then((res) => { setRows(res.data.items); setTotalRows(res.data.total); setIsLoading(false) })
@@ -106,7 +100,7 @@ export function UserCadastro() {
 
     const handleSearch = () => {
         const filter = rows.filter((item) => String(item[column]).toLowerCase().includes(String(search).toLowerCase()))
-        if (filter.length == 0) {
+        if (filter.length === 0) {
             toast.error(`Nenhum resultado encontrado para a pesquisa pelo(a) ${column} ${search}`)
         }
         setRowsFiltered(filter)
@@ -146,7 +140,7 @@ export function UserCadastro() {
     return (
         <>
             <Box sx={windowWidth > 600 ? { display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3, mt: 2 } : { display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3, mt: 2, flexDirection: "column" }}>
-                <Typography variant="h5" sx={{ fontWeight: 600, color: colors.primary_base, fontSize: '24px' }}>
+                <Typography variant="h5" sx={{ fontWeight: 600, color: colors.primary_base, fontSize: '24px', marginLeft: '5px' }}>
                     Usuários de cadastro
                 </Typography>
                 <Box sx={windowWidth > 600 ? { gap: "10px", display: "flex" } : { gap: "10px", display: "flex", flexDirection: "column" }}>

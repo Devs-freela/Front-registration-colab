@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, Select, Switch, TextField, Typography } from '@mui/material';
 import { body, button, buttonMobile, buttonMobileSuccess, buttonSuccess, container, containerLoadingBtn, containerLoadingBtnMobile, containerSelect, form, input, inputError, inputGroup1, inputGroup2, inputGroupMobile, title } from './styles/AppStyles';
@@ -8,7 +10,6 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { calculateAge } from './utils/calculateAge';
-import { useParams } from 'react-router-dom';
 import { colors } from '../../shared/themes';
 import { api } from '../../utils/api';
 import { useToken } from '../../shared/hooks/useAuth';
@@ -64,11 +65,11 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
     const { userId, User_Access } = useToken()
 
     const recutador = (userAccess: string, userId: string) => {
-        if (userAccess == "Lider") {
+        if (userAccess === "Lider") {
             return { liderId: userId }
-        } else if (userAccess == "Colaborador-Cadastro") {
+        } else if (userAccess === "Colaborador-Cadastro") {
             return { recrutadorId: userId }
-        } else if (userAccess == "Administrativo") {
+        } else if (userAccess === "Administrativo") {
             return { admId: userId }
         }
     }
@@ -150,7 +151,7 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
     }, [dataNascimentoListenner])
 
     useEffect(() => {
-        if (cepListenner?.length == 8 && !isEdit) {
+        if (cepListenner?.length === 8 && !isEdit) {
             setCeploading(true)
             axios.get(`https://brasilapi.com.br/api/cep/v2/${cepListenner}`, {
             }).then((res) => {
@@ -161,7 +162,7 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
             }).catch((err) => {
                 err.response.data.errors.map((erro: any) => {
                     toast.error(erro.message)
-                    if (erro.message == "CEP NAO ENCONTRADO") {
+                    if (erro.message === "CEP NAO ENCONTRADO") {
                         toast.error("Cep não encontrado")
                         setValue("rua", "")
                         setValue("bairro", "")

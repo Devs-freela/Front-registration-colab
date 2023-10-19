@@ -35,7 +35,7 @@ export function Lideres() {
     }, [])
 
     useEffect(() => {
-        if (attReq != 0)
+        if (attReq !== 0)
             setIsLoading(true)
         api.get("api/lider").then((res) => {
             setRows(res.data)
@@ -58,7 +58,7 @@ export function Lideres() {
 
     const handleSearch = () => {
         const filter = rows.filter((item) => String(item[column]).toLowerCase().includes(String(search).toLowerCase()))
-        if (filter.length == 0) {
+        if (filter.length === 0) {
             toast.error(`Nenhum resultado encontrado para a pesquisa pelo(a) ${column} ${search}`)
         }
         setRowsFiltered(filter)
@@ -134,7 +134,7 @@ export function Lideres() {
     return (
         <>
             <Box sx={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center" }}>
-                <Typography variant="h5" sx={{ fontWeight: 600, color: colors.primary_base, fontSize: '24px', mb: 3, mt: 2 }}>
+                <Typography variant="h5" sx={{ fontWeight: 600, color: colors.primary_base, fontSize: '24px', mb: 3, mt: 2, marginLeft: '5px' }}>
                     Listagem de Líderes
                 </Typography>
                 <Box sx={windowWidth > 600 ? { gap: "10px", display: "flex" } : { gap: "10px", display: "flex", flexDirection: "column" }}>

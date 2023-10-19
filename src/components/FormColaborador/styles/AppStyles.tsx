@@ -14,7 +14,8 @@ export const body = {
 export const title = {
     color: "#202B71",
     fontWeight: 700,
-    fontSize: "2.5rem"
+    fontSize: "1.5rem",
+    marginTop: "20px"
 }
 
 export const form = {
@@ -68,8 +69,8 @@ export const containerSelect = {
 
 export const button = {
     backgroundColor: colors.primary_lightest,
-    width: "224px",
-    height: "56px",
+    width: "150px",
+    height: "50px",
     color: "black",
     fontWeight: 700,
     '&:hover': {
@@ -80,7 +81,7 @@ export const button = {
 export const buttonMobile = {
     backgroundColor: colors.primary_lightest,
     width: "100%",
-    height: "56px",
+    height: "50px",
     color: "black",
     fontWeight: 700,
     '&:hover': {

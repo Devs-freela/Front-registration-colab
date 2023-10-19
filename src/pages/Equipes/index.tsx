@@ -1,15 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Accordion, AccordionDetails, AccordionSummary, Autocomplete, Box, Button, CircularProgress, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from "@mui/material"
-import { TableGrid } from "../../components/TableGrid"
 import { colors } from "../../shared/themes";
 import { useEffect, useState } from "react";
 import Dialog from '@mui/material/Dialog';
-import FormColaborator from "../../components/FormColaborador";
 import { api } from "../../utils/api";
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import { toast } from "react-toastify";
 import { useToken } from "../../shared/hooks/useAuth";
-import { columns } from "./columns";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import * as Yup from 'yup';
 import { useForm } from "react-hook-form";
@@ -112,7 +111,7 @@ export function Equipes() {
     const DeleteValueFromArray = (data: any) => {
         const newArr = [...colaboradores, data]
 
-        const colaboradoresRestante = colaboradoresSelecionados?.filter((colaborador: any) => colaborador.id != data.id)
+        const colaboradoresRestante = colaboradoresSelecionados?.filter((colaborador: any) => colaborador.id !== data.id)
 
         setColaboradoresSelecionados(colaboradoresRestante)
         setColaboradores(newArr)
@@ -121,7 +120,7 @@ export function Equipes() {
 
 
     const deleteValueFromArrayEdit = (data: any) => {
-        const colaboradoresRestante = equipSelected?.membros?.filter((colaborador: any) => colaborador.id != data.id)
+        const colaboradoresRestante = equipSelected?.membros?.filter((colaborador: any) => colaborador.id !== data.id)
         const newArr = [...colaboradores, data]
         setColaboradores(newArr)
         setEquipSelected({
@@ -129,7 +128,7 @@ export function Equipes() {
             membros: colaboradoresRestante
         })
         if (colaboradoresEdit.includes(data)) {
-            const colaboradoresRestanteEdit = colaboradoresEdit.filter((colaborador: any) => colaborador.id != data.id)
+            const colaboradoresRestanteEdit = colaboradoresEdit.filter((colaborador: any) => colaborador.id !== data.id)
             setColaboradoresEdit(colaboradoresRestanteEdit)
         } else {
             setOutColaboradoresEdit([...outColaboradoresEdit, data.id])
@@ -140,13 +139,13 @@ export function Equipes() {
 
         const newArr = [...colaboradoresEdit, data]
         if (outColaboradoresEdit.includes(data)) {
-            const colaboradoresRestanteEdit = outColaboradoresEdit.filter((colaborador: any) => colaborador.id != data.id)
+            const colaboradoresRestanteEdit = outColaboradoresEdit.filter((colaborador: any) => colaborador.id !== data.id)
             setOutColaboradoresEdit(colaboradoresRestanteEdit)
         } else {
             setColaboradoresEdit(newArr)
         }
         const arrRenderizado = [...new Set([...newArr, ...equipSelected.membros])]
-        const colaboradoresRestanteAutoComplete = colaboradores?.filter((colaborador: any) => colaborador.id != data.id)
+        const colaboradoresRestanteAutoComplete = colaboradores?.filter((colaborador: any) => colaborador.id !== data.id)
 
         setColaboradores(colaboradoresRestanteAutoComplete)
         setEquipSelected({
@@ -159,24 +158,24 @@ export function Equipes() {
         const novosMembros = colaboradoresEdit.map((item) => item.id)
         const removerMembros = outColaboradoresEdit
 
-        if (data.nome != getValues("nome") && data.liderId != getValues("liderId")) {
+        if (data.nome !== getValues("nome") && data.liderId !== getValues("liderId")) {
             api.put(`api/equipe/${equipSelected.id}`, {
                 ...data,
                 novosMembros,
                 removerMembros
             }).then((res) => { toast.success("Equipe editada com sucesso!"); handleAtt(); handleCloseModalEdit() }).catch((err) => toast.error(err.response.data.message))
-        } else if (data.nome == getValues("nome") && data.liderId == getValues("liderId")) {
+        } else if (data.nome === getValues("nome") && data.liderId === getValues("liderId")) {
             api.put(`api/equipe/${equipSelected.id}`, {
                 novosMembros,
                 removerMembros
             }).then((res) => { toast.success("Equipe editada com sucesso!"); handleAtt(); handleCloseModalEdit() }).catch((err) => toast.error(err.response.data.message))
-        } else if (data.nome != getValues("nome") && data.liderId == getValues("liderId")) {
+        } else if (data.nome !== getValues("nome") && data.liderId === getValues("liderId")) {
             api.put(`api/equipe/${equipSelected.id}`, {
                 nome: data.nome,
                 novosMembros,
                 removerMembros
             }).then((res) => { toast.success("Equipe editada com sucesso!"); handleAtt(); handleCloseModalEdit() }).catch((err) => toast.error(err.response.data.message))
-        } else if (data.nome == getValues("nome") && data.liderId != getValues("liderId")) {
+        } else if (data.nome === getValues("nome") && data.liderId !== getValues("liderId")) {
             api.put(`api/equipe/${equipSelected.id}`, {
                 liderId: data.liderId,
                 novosMembros,
@@ -188,7 +187,7 @@ export function Equipes() {
     const handleAutoComplete = (data: any) => {
         const newArr = [...colaboradoresSelecionados, data]
 
-        const colaboradoresRestante = colaboradores?.filter((colaborador: any) => colaborador.id != data.id)
+        const colaboradoresRestante = colaboradores?.filter((colaborador: any) => colaborador.id !== data.id)
         setColaboradoresSelecionados(newArr)
         setColaboradores(colaboradoresRestante)
     }
@@ -229,7 +228,7 @@ export function Equipes() {
 
     const handleSearch = () => {
         const filter = rows.filter((item) => String(item[column]).toLowerCase().includes(String(search).toLowerCase()))
-        if (filter.length == 0) {
+        if (filter.length === 0) {
             toast.error(`Nenhum resultado encontrado para a pesquisa pelo(a) ${column} ${search}`)
         }
         setRowsFiltered(filter)
@@ -258,14 +257,14 @@ export function Equipes() {
     }, [])
 
     useEffect(() => {
-        if (attReq != 0)
+        if (attReq !== 0)
             api.get("api/equipe").then((res: any) => setRows(res.data))
     }, [attReq])
 
     return (
         <>
             <Box sx={windowWidth > 600 ? { display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3, mt: 2 } : { display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3, mt: 2, flexDirection: "column" }}>
-                <Typography variant="h5" sx={{ fontWeight: 600, color: colors.primary_base, fontSize: '24px' }}>
+                <Typography variant="h5" sx={{ fontWeight: 600, color: colors.primary_base, fontSize: '24px', marginLeft: '5px' }}>
                     Equipes
                 </Typography>
                 <Box sx={windowWidth > 600 ? { gap: "10px", display: "flex" } : { gap: "10px", display: "flex", flexDirection: "column" }}>
@@ -330,7 +329,7 @@ export function Equipes() {
                                 </TableCell>
                             </TableRow>
                         </TableHead>
-                        {isLoading && rows.length == 0 && <Box sx={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", height: "60vh" }}><CircularProgress /></Box>}
+                        {isLoading && rows.length === 0 && <Box sx={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", height: "60vh" }}><CircularProgress /></Box>}
                         {rowsFiltered.length > 0 ?
                             <TableBody>
                                 {rowsFiltered.length > 0 && rowsFiltered?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: any) => {

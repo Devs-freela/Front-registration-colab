@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, Select, Switch, TextField, Typography } from '@mui/material';
 import { body, button, buttonMobile, buttonMobileSuccess, buttonSuccess, container, containerLoadingBtn, containerLoadingBtnMobile, containerSelect, form, input, inputError, inputGroup1, inputGroup2, inputGroupMobile, title } from '../FormColaborador/styles/AppStyles';
@@ -7,7 +9,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { useParams } from 'react-router-dom';
 import { colors } from '../../shared/themes';
 import { api } from '../../utils/api';
 import { useToken } from '../../shared/hooks/useAuth';
@@ -72,11 +73,11 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
     const { userId, User_Access } = useToken()
 
     const recutador = (userAccess: string, userId: string) => {
-        if (userAccess == "Lider") {
+        if (userAccess === "Lider") {
             return { liderId: userId }
-        } else if (userAccess == "Colaborador-Cadastro") {
+        } else if (userAccess === "Colaborador-Cadastro") {
             return { recrutadorId: userId }
-        } else if (userAccess == "Administrativo") {
+        } else if (userAccess === "Administrativo") {
             return { admId: userId }
         }
     }
@@ -158,7 +159,7 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
     }, [dataNascimentoListenner])
 
     useEffect(() => {
-        if (cepListenner?.length == 8 && !isEdit) {
+        if (cepListenner?.length === 8 && !isEdit) {
             setCeploading(true)
             axios.get(`https://brasilapi.com.br/api/cep/v2/${cepListenner}`, {
             }).then((res) => {
@@ -169,7 +170,7 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
             }).catch((err) => {
                 err.response.data.errors.map((erro: any) => {
                     toast.error(erro.message)
-                    if (erro.message == "CEP NAO ENCONTRADO") {
+                    if (erro.message === "CEP NAO ENCONTRADO") {
                         toast.error("Cep não encontrado")
                         setValue("rua", "")
                         setValue("bairro", "")
@@ -496,19 +497,3 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
 }
 
 export default FormColaboratorRegister;
-
-
-{/* <FormControl variant='filled'>
-<InputLabel sx={errors.liderId?.message ? { color: "#d32f2f" } : { color: "#202B71" }}>{errors.liderId?.message ?? "Selecione um líder "}</InputLabel>
-<Select
-    label={errors.liderId?.message ?? "Selecione um Líder"}
-    {...register("liderId")}
-    error={!!errors.liderId?.message}
-    sx={errors.liderId?.message ? inputError : { ...input, padding: 0 }}
-    defaultValue={""}
->
-    {lideres.map((lider: any) => (
-        <MenuItem value={lider.id}>{lider.nome}</MenuItem>
-    ))}
-</Select>
-</FormControl> */}

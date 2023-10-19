@@ -5,14 +5,14 @@ import { useToken } from "../../shared/hooks/useAuth";
 
 export function Link() {
     const { User_Access, userId } = useToken()
-    const path = User_Access == "Administrativo" ? `https://registro-separado.vercel.app/register/adm/${userId}` : `https://registro-separado.vercel.app/register/${userId}`
+    const path = User_Access === "Administrativo" ? `https://registro-separado.vercel.app/register/adm/${userId}` : `https://registro-separado.vercel.app/register/${userId}`
 
 
     return (
         <>
             <Box sx={{ display: 'flex', justifyContent: 'center', padding: 25 }}>
                 <Box>
-                    <Typography sx={{ fontWeight: 600, color: colors.primary_dark, fontSize: '24px' }} >
+                    <Typography sx={{ fontWeight: 600, color: colors.primary_dark, fontSize: '24px', display: 'flex', justifyContent: 'center' }} >
                         Copie o link para adicionar um novo colaborador
                     </Typography>
                     <Box sx={{
