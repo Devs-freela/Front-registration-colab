@@ -186,6 +186,45 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
         return `${ano}-${mes}-${dia}`;
     }
 
+    const handleCPFEdit = (cpf: string) => {
+        const numericValue = cpf.replace(/\D/g, '');
+
+        let formattedCPF = numericValue;
+        if (numericValue.length > 3) {
+            formattedCPF = `${numericValue.slice(0, 3)}.${numericValue.slice(3)}`;
+        }
+        if (numericValue.length > 6) {
+            formattedCPF = `${formattedCPF.slice(0, 7)}.${formattedCPF.slice(7)}`;
+        }
+        if (numericValue.length > 9) {
+            formattedCPF = `${formattedCPF.slice(0, 11)}-${formattedCPF.slice(11)}`;
+        }
+        setCpf(formattedCPF);
+        return formattedCPF
+    }
+
+
+    const handlePhoneNumberEdit = (number: string): string => {
+
+        const numericValue = number.replace(/\D/g, '');
+
+        let formattedPhoneNumber = numericValue;
+
+        if (numericValue.length > 2) {
+            formattedPhoneNumber = `(${numericValue.slice(0, 2)}`;
+            if (numericValue.length > 2) {
+                formattedPhoneNumber = `${formattedPhoneNumber}) ${numericValue.slice(2, 7)}`;
+                if (numericValue.length > 7) {
+                    formattedPhoneNumber = `${formattedPhoneNumber}-${numericValue.slice(7, 11)}`;
+                }
+            }
+        }
+
+        setPhoneNumber(formattedPhoneNumber)
+        return formattedPhoneNumber
+    }
+
+
     const [faixaSalarialDefault, setFaixaSalarialDefault] = useState<number>()
     const [recebeBeneficio, setRecebeBeneficio] = useState(false)
     const [userRole, setUserRoles] = useState()
@@ -197,7 +236,7 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                 setUserRoles(res.data.role?.name)
                 setValue("nome", res.data.nome)
                 setValue("dataNascimento", formatarData(res.data.dataNascimento) as unknown as Date)
-                setValue("telefone", res.data.telefone)
+                setValue("telefone", handlePhoneNumberEdit(res.data.telefone))
                 setValue("email", res.data.email)
                 setValue("profissao", res.data.profissao)
                 setValue("escolaridade", res.data.escolaridade)
@@ -208,7 +247,7 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                 setValue("numeroCasa", res.data.numeroCasa)
                 setValue("rg", res.data.rg)
                 setValue("orgaoExpedidor", res.data.orgaoExpedidor)
-                setValue("cpf", res.data.cpf)
+                setValue("cpf", handleCPFEdit(res.data.cpf))
                 setValue("tituloEleitor", res.data.tituloEleitor)
                 setValue("secao", res.data.secao)
                 setValue("zona", res.data.zona)
