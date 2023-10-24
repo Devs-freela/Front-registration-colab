@@ -92,6 +92,8 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                 }
                 setLoading(false)
                 setApiSuccess(true)
+                setPhoneNumber("")
+                setCpf("")
                 reset()
                 toast.success(res.data.message)
                 if (closeModal) {
