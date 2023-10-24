@@ -1,4 +1,5 @@
 import { GridColDef } from '@mui/x-data-grid';
+import { formatPhoneNumber } from '../../utils/validationCpf';
 
 export const columns: GridColDef[] = [
     {
@@ -13,6 +14,10 @@ export const columns: GridColDef[] = [
     {
         field: 'telefone',
         headerName: 'TELEFONE',
+        renderCell: param => {
+            const telefone = formatPhoneNumber(param.row.telefone);
+            return telefone;
+        }
     },
     {
         field: 'bairro',

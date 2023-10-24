@@ -18,7 +18,7 @@ const schema = Yup.object().shape({
     nome: Yup.string().required('O nome é obrigatório'),
     dataNascimento: Yup.date().required('A data de nascimento é obrigatória').typeError('A data de nascimento é obrigatória'),
     idade: Yup.number().required('A idade é obrigatória').typeError('A idade é obrigatória'),
-    telefone: Yup.string().required('O telefone é obrigatório'),
+    telefone: Yup.string().required('O telefone é obrigatório').length(15, 'Telefone deve conter 11 dígitos numéricos'),
     email: Yup.string().email('Digite um email válido').required('O email é obrigatório'),
     profissao: Yup.string().required('Profissão é obrigatório'),
     escolaridade: Yup.string().required('Escolaridade é obrigatório'),
@@ -29,7 +29,7 @@ const schema = Yup.object().shape({
     numeroCasa: Yup.string().required('Número é obrigatório'),
     rg: Yup.string().required('RG é obrigatório'),
     orgaoExpedidor: Yup.string().required('Orgão expeditor é obrigatório'),
-    cpf: Yup.string().required('CPF é obrigatório'),
+    cpf: Yup.string().length(14, 'CPF deve conter 11 dígitos numéricos').required('CPF é obrigatório'),
     tituloEleitor: Yup.string().required('Título de eleitor é obrigatório'),
     zona: Yup.string().required('Zona eleitoral é obrigatório'),
     secao: Yup.string().required('Sessão é obrigatório'),
@@ -55,6 +55,9 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
     const [apiSuccess, setApiSuccess] = useState(false)
     const [winSize] = useState(600)
     const [shrinkEdit, setShrinkEdit] = useState(false)
+    const [cpf, setCpf] = useState('')
+    const [phoneNumber, setPhoneNumber] = useState('');
+
 
     window.addEventListener("resize", () => setWindowWidth(window.innerWidth))
 
@@ -219,6 +222,44 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
         }
     }, [])
 
+    const handleCPF = (event: any) => {
+        const { value } = event.target;
+        const numericValue = value.replace(/\D/g, '');
+
+        let formattedCPF = numericValue;
+        if (numericValue.length > 3) {
+            formattedCPF = `${numericValue.slice(0, 3)}.${numericValue.slice(3)}`;
+        }
+        if (numericValue.length > 6) {
+            formattedCPF = `${formattedCPF.slice(0, 7)}.${formattedCPF.slice(7)}`;
+        }
+        if (numericValue.length > 9) {
+            formattedCPF = `${formattedCPF.slice(0, 11)}-${formattedCPF.slice(11)}`;
+        }
+
+        setCpf(formattedCPF);
+    }
+
+    const handlePhoneNumber = (event: any) => {
+        const { value } = event.target;
+
+        const numericValue = value.replace(/\D/g, '');
+
+        let formattedPhoneNumber = numericValue;
+
+        if (numericValue.length > 2) {
+            formattedPhoneNumber = `(${numericValue.slice(0, 2)}`;
+            if (numericValue.length > 2) {
+                formattedPhoneNumber = `${formattedPhoneNumber}) ${numericValue.slice(2, 7)}`;
+                if (numericValue.length > 7) {
+                    formattedPhoneNumber = `${formattedPhoneNumber}-${numericValue.slice(7, 11)}`;
+                }
+            }
+        }
+
+        setPhoneNumber(formattedPhoneNumber);
+    }
+
 
     return loadingEdit ? <Box sx={container}><CircularProgress /></Box> : (
         <Box sx={body}>
@@ -248,6 +289,10 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                             InputLabelProps={{
                                 shrink: true,
                             }}
+                            inputProps={{
+                                max: '2100-12-31',
+                                min: '1000-12-31'
+                            }}
                             sx={errors.dataNascimento?.message ? inputError : input}
                             type='date'
                         />
@@ -262,9 +307,13 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                         />
                         <TextField
                             label={errors.telefone?.message ?? "Telefone"}
+                            placeholder='(DDD) 99999-9999'
                             {...register("telefone")}
                             error={!!errors.telefone?.message}
                             {...(shrinkEdit ? { InputLabelProps: { shrink: true } } : {})}
+                            value={phoneNumber}
+                            onChange={(e) => handlePhoneNumber(e)}
+                            inputProps={{ maxLength: 15 }}
                             variant="filled"
                             sx={errors.telefone?.message ? inputError : input}
                         />
@@ -376,6 +425,9 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                             {...register("cpf")}
                             error={!!errors.cpf?.message}
                             {...(shrinkEdit ? { InputLabelProps: { shrink: true } } : {})}
+                            value={cpf}
+                            onChange={(e) => handleCPF(e)}
+                            inputProps={{ maxLength: 14 }}
                             variant="filled"
                             sx={errors.cpf?.message ? inputError : input}
                         />

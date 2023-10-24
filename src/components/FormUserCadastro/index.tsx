@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
@@ -18,7 +19,7 @@ const schema = Yup.object().shape({
     nome: Yup.string().required('O nome é obrigatório'),
     dataNascimento: Yup.date().required('A data de nascimento é obrigatória').typeError('A data de nascimento é obrigatória'),
     idade: Yup.number().required('A idade é obrigatória').typeError('A idade é obrigatória'),
-    telefone: Yup.string().required('O telefone é obrigatório'),
+    telefone: Yup.string().required('O telefone é obrigatório').length(15, 'Telefone deve conter 11 dígitos numéricos'),
     email: Yup.string().email('Digite um email válido').required('O email é obrigatório'),
     profissao: Yup.string().required('Profissão é obrigatório'),
     escolaridade: Yup.string().required('Escolaridade é obrigatório'),
@@ -29,7 +30,7 @@ const schema = Yup.object().shape({
     numeroCasa: Yup.string().required('Número é obrigatório'),
     rg: Yup.string().required('RG é obrigatório'),
     orgaoExpedidor: Yup.string().required('Orgão expeditor é obrigatório'),
-    cpf: Yup.string().required('CPF é obrigatório').length(11, 'CPF deve conter 11 dígitos numéricos'),
+    cpf: Yup.string().required('CPF é obrigatório').length(14, 'CPF deve conter 11 dígitos numéricos'),
     tituloEleitor: Yup.string().required('Título de eleitor é obrigatório'),
     zona: Yup.string().required('Zona eleitoral é obrigatório'),
     secao: Yup.string().required('Sessão é obrigatório'),
@@ -57,6 +58,8 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
     const [winSize] = useState(600)
     const [shrinkEdit, setShrinkEdit] = useState(false)
     const [lideres, setLideres] = useState([])
+    const [cpf, setCpf] = useState('')
+    const [phoneNumber, setPhoneNumber] = useState('');
 
     useEffect(() => {
         api.get("api/lider").then((res: any) => setLideres(res.data))
@@ -67,8 +70,6 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
     const { register, handleSubmit, reset, setValue, formState: { errors }, watch } = useForm({
         resolver: !isEdit ? yupResolver(schema) : yupResolver(schema),
     });
-
-
 
     const { userId, User_Access } = useToken()
 
@@ -182,6 +183,45 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
         }
     }, [cepListenner])
 
+    const handleCPF = (event: any) => {
+        const { value } = event.target;
+        const numericValue = value.replace(/\D/g, '');
+
+        let formattedCPF = numericValue;
+        if (numericValue.length > 3) {
+            formattedCPF = `${numericValue.slice(0, 3)}.${numericValue.slice(3)}`;
+        }
+        if (numericValue.length > 6) {
+            formattedCPF = `${formattedCPF.slice(0, 7)}.${formattedCPF.slice(7)}`;
+        }
+        if (numericValue.length > 9) {
+            formattedCPF = `${formattedCPF.slice(0, 11)}-${formattedCPF.slice(11)}`;
+        }
+
+        setCpf(formattedCPF);
+    }
+
+    const handlePhoneNumber = (event: any) => {
+        const { value } = event.target;
+
+        const numericValue = value.replace(/\D/g, '');
+
+        let formattedPhoneNumber = numericValue;
+
+        if (numericValue.length > 2) {
+            formattedPhoneNumber = `(${numericValue.slice(0, 2)}`;
+            if (numericValue.length > 2) {
+                formattedPhoneNumber = `${formattedPhoneNumber}) ${numericValue.slice(2, 7)}`;
+                if (numericValue.length > 7) {
+                    formattedPhoneNumber = `${formattedPhoneNumber}-${numericValue.slice(7, 11)}`;
+                }
+            }
+        }
+
+        setPhoneNumber(formattedPhoneNumber);
+    }
+
+
     useEffect(() => {
         if (isEdit) {
             api.get(`/api/colaborador/${idColaborador}`).then((res) => {
@@ -238,6 +278,10 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
                             InputLabelProps={{
                                 shrink: true,
                             }}
+                            inputProps={{
+                                max: '2100-12-31',
+                                min: '1000-12-31'
+                            }}
                             sx={errors.dataNascimento?.message ? inputError : input}
                             type='date'
                         />
@@ -252,9 +296,13 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
                         />
                         <TextField
                             label={errors.telefone?.message ?? "Telefone"}
+                            placeholder='(DDD) 99999-9999'
                             {...register("telefone")}
                             error={!!errors.telefone?.message}
                             {...(shrinkEdit ? { InputLabelProps: { shrink: true } } : {})}
+                            value={phoneNumber}
+                            onChange={(e) => handlePhoneNumber(e)}
+                            inputProps={{ maxLength: 15 }}
                             variant="filled"
                             sx={errors.telefone?.message ? inputError : input}
                         />
@@ -366,7 +414,9 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
                             {...register("cpf")}
                             error={!!errors.cpf?.message}
                             {...(shrinkEdit ? { InputLabelProps: { shrink: true } } : {})}
-                            inputProps={{ maxLength: 11 }}
+                            inputProps={{ maxLength: 14 }}
+                            value={cpf}
+                            onChange={(e) => handleCPF(e)}
                             variant="filled"
                             sx={errors.cpf?.message ? inputError : input}
                         />
