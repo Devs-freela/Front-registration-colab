@@ -61,7 +61,6 @@ export function TokenProvider({ children }: TokenProviderProps) {
             api.post("/api/auths/verify/token", { token: token }).then((res) => {
                 setUser_Access(res.data.sub.role)
                 setUserId(res.data.sub.id)
-                console.log(res)
             }).catch((err) => {
                 // window.location.href = "/login"
             })

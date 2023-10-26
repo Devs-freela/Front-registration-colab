@@ -67,11 +67,10 @@ export const APP_PAGES = () => {
                 route: '/Cadastro',
                 icon: <FactCheckOutlinedIcon />,
                 component: <FormColaboratorRegister handleCloseModal={() => { }} />,
-                showMenu: User_Access !== "Lider",
+                showMenu: User_Access !== "Lider" && User_Access !== "Administrativo",
             },
         ];
     } else {
-        console.log(localStorage.getItem("@token"))
         setTimeout(() => {
             if (!window.location.href.includes("login")) {
                 window.location.href = "/login"

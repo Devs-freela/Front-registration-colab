@@ -34,7 +34,8 @@ const schema = Yup.object().shape({
     zona: Yup.string().required('Zona eleitoral é obrigatório'),
     secao: Yup.string().required('Sessão é obrigatório'),
     faixaSalarial: Yup.number().required('Salário mínimo é obrigatório').typeError('Salário mínimo é obrigatório'),
-    recebeBeneficio: Yup.boolean()
+    recebeBeneficio: Yup.boolean(),
+    nomeMae: Yup.string().required('O nome da mãe é obrigatório')
 });
 
 interface props {
@@ -390,6 +391,15 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                             variant="filled"
                             sx={errors.redesSociais?.message ? inputError : input}
                         />
+                        <TextField
+                            label={errors.nomeMae?.message ?? "Nome da mãe"}
+                            {...register("nomeMae")}
+                            error={!!errors.nomeMae?.message}
+                            variant="filled"
+                            {...register}
+                            {...(shrinkEdit ? { InputLabelProps: { shrink: true } } : {})}
+                            sx={windowWidth < winSize ? errors.nomeMae?.message ? inputError : input : errors.nomeMae?.message ? inputError : { ...input, gridColumn: "1/3" }}
+                        />
                     </Box>
                     <Typography variant='h4' component="h4" sx={{ fontSize: "20px", color: "#202B71", fontWeight: 700, marginTop: 3 }}>
                         Endereço
@@ -498,7 +508,7 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                         />
                     </Box>
                     <Typography variant='h4' component="h4" sx={{ fontSize: "20px", color: "#202B71", fontWeight: 700, marginTop: 3 }}>
-                        Benefícios
+                        Faixa salarial
                     </Typography>
                     <Box sx={windowWidth < winSize ? inputGroupMobile : inputGroup1}>
                         <FormControl variant='filled'>
@@ -520,16 +530,19 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                                 <MenuItem value={7}>Mais de 6 salários mínimo</MenuItem>
                             </Select>
                         </FormControl>
-                        <Box sx={containerSelect}>
-                            <Typography>Recebe algum benefício?</Typography>
-                            <Typography sx={{ marginLeft: "20px", fontWeight: 700 }}>Não</Typography>
-                            <Switch
-                                defaultChecked={recebeBeneficio}
-                                color='info'
-                                {...register("recebeBeneficio")}
-                            />
-                            <Typography sx={{ fontWeight: 700 }}>Sim</Typography>
-                        </Box>
+                    </Box>
+                    <Typography variant='h4' component="h4" sx={{ fontSize: "20px", color: "#202B71", fontWeight: 700, marginTop: 3 }}>
+                        Benefícios
+                    </Typography>
+                    <Box sx={containerSelect}>
+                        <Typography>Recebe algum benefício?</Typography>
+                        <Typography sx={{ marginLeft: "20px", fontWeight: 700 }}>Não</Typography>
+                        <Switch
+                            defaultChecked={recebeBeneficio}
+                            color='info'
+                            {...register("recebeBeneficio")}
+                        />
+                        <Typography sx={{ fontWeight: 700 }}>Sim</Typography>
                     </Box>
                     {isEdit &&
                         <>

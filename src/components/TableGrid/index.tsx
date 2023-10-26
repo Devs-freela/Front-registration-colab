@@ -135,31 +135,57 @@ export function TableGrid(props: TableGridProps) {
   const matches = useMediaQuery('(max-width:480px)');
   return (
     <Box sx={tableContainer}>
-      <DataGrid
-        onPaginationModelChange={(e) => props.setSkip && props.setSkip(e.page * e.pageSize)}
-        rows={props.rows}
-        columns={columns.map((column: GridColDef) => ({
-          ...column,
-          ...(!matches ? {
-            flex: 1,
-          } : { width: 230 }),
-          sortable: false,
-          headerClassName: 'super-app-theme--header',
-        }))}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 10,
+      {props.setSkip && props.totalRows && props.isLoading ?
+        <DataGrid
+          onPaginationModelChange={(e) => props.setSkip && props.setSkip(e.page * e.pageSize)}
+          rows={props.rows}
+          columns={columns.map((column: GridColDef) => ({
+            ...column,
+            ...(!matches ? {
+              flex: 1,
+            } : { width: 230 }),
+            sortable: false,
+            headerClassName: 'super-app-theme--header',
+          }))}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 10,
+              },
             },
-          },
-        }}
-        paginationMode="server"
-        pageSizeOptions={[5]}
-        loading={props.isLoading !== undefined ? props.isLoading : false}
-        rowCount={props.totalRows && props.totalRows}
-        onCellClick={handleOnCellClick}
-        sx={table}
-      />
+          }}
+          paginationMode="server"
+          pageSizeOptions={[5]}
+          loading={props.isLoading !== undefined ? props.isLoading : false}
+          rowCount={props.totalRows && props.totalRows}
+          onCellClick={handleOnCellClick}
+          sx={table}
+        />
+        :
+        <DataGrid
+          rows={props.rows}
+          columns={columns.map((column: GridColDef) => ({
+            ...column,
+            ...(!matches ? {
+              flex: 1,
+            } : { width: 230 }),
+            sortable: false,
+            headerClassName: 'super-app-theme--header',
+          }))}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 10,
+              },
+            },
+          }}
+          pageSizeOptions={[10]}
+          loading={props.isLoading !== undefined ? props.isLoading : false}
+          onCellClick={handleOnCellClick}
+          sx={table}
+        />
+      }
+
     </Box>
   );
 }

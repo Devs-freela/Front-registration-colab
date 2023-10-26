@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable array-callback-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
@@ -30,13 +29,13 @@ const schema = Yup.object().shape({
     numeroCasa: Yup.string().required('Número é obrigatório'),
     rg: Yup.string().required('RG é obrigatório'),
     orgaoExpedidor: Yup.string().required('Orgão expeditor é obrigatório'),
-    cpf: Yup.string().required('CPF é obrigatório').length(14, 'CPF deve conter 11 dígitos numéricos'),
+    cpf: Yup.string().length(14, 'CPF deve conter 11 dígitos numéricos').required('CPF é obrigatório'),
     tituloEleitor: Yup.string().required('Título de eleitor é obrigatório'),
     zona: Yup.string().required('Zona eleitoral é obrigatório'),
     secao: Yup.string().required('Sessão é obrigatório'),
     faixaSalarial: Yup.number().required('Salário mínimo é obrigatório').typeError('Salário mínimo é obrigatório'),
     recebeBeneficio: Yup.boolean(),
-    liderId: Yup.string().required('Lider é obrigatório')
+    nomeMae: Yup.string().required('O nome da mãe é obrigatório')
 });
 
 interface props {
@@ -48,7 +47,7 @@ interface props {
     formLider?: boolean
 }
 
-function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, handleAtt, closeModal, formLider }: props) {
+function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, closeModal, formLider }: props) {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth)
     const [cepFind, setCepFind] = useState(false)
     const [cepLoading, setCeploading] = useState(false)
@@ -57,13 +56,9 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
     const [apiSuccess, setApiSuccess] = useState(false)
     const [winSize] = useState(600)
     const [shrinkEdit, setShrinkEdit] = useState(false)
-    const [lideres, setLideres] = useState([])
     const [cpf, setCpf] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('');
 
-    useEffect(() => {
-        api.get("api/lider").then((res: any) => setLideres(res.data))
-    }, [])
 
     window.addEventListener("resize", () => setWindowWidth(window.innerWidth))
 
@@ -98,6 +93,8 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
                 }
                 setLoading(false)
                 setApiSuccess(true)
+                setPhoneNumber("")
+                setCpf("")
                 reset()
                 toast.success(res.data.message)
                 if (closeModal) {
@@ -183,6 +180,91 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
         }
     }, [cepListenner])
 
+    function formatarData(data: string) {
+        const dataObj = new Date(data);
+        const ano = dataObj.getFullYear();
+        const mes = (dataObj.getMonth() + 1).toString().padStart(2, '0');
+        const dia = dataObj.getDate().toString().padStart(2, '0');
+
+        return `${ano}-${mes}-${dia}`;
+    }
+
+    const handleCPFEdit = (cpf: string) => {
+        const numericValue = cpf.replace(/\D/g, '');
+
+        let formattedCPF = numericValue;
+        if (numericValue.length > 3) {
+            formattedCPF = `${numericValue.slice(0, 3)}.${numericValue.slice(3)}`;
+        }
+        if (numericValue.length > 6) {
+            formattedCPF = `${formattedCPF.slice(0, 7)}.${formattedCPF.slice(7)}`;
+        }
+        if (numericValue.length > 9) {
+            formattedCPF = `${formattedCPF.slice(0, 11)}-${formattedCPF.slice(11)}`;
+        }
+        setCpf(formattedCPF);
+        return formattedCPF
+    }
+
+
+    const handlePhoneNumberEdit = (number: string): string => {
+
+        const numericValue = number.replace(/\D/g, '');
+
+        let formattedPhoneNumber = numericValue;
+
+        if (numericValue.length > 2) {
+            formattedPhoneNumber = `(${numericValue.slice(0, 2)}`;
+            if (numericValue.length > 2) {
+                formattedPhoneNumber = `${formattedPhoneNumber}) ${numericValue.slice(2, 7)}`;
+                if (numericValue.length > 7) {
+                    formattedPhoneNumber = `${formattedPhoneNumber}-${numericValue.slice(7, 11)}`;
+                }
+            }
+        }
+
+        setPhoneNumber(formattedPhoneNumber)
+        return formattedPhoneNumber
+    }
+
+
+    const [faixaSalarialDefault, setFaixaSalarialDefault] = useState<number>()
+    const [recebeBeneficio, setRecebeBeneficio] = useState(false)
+    const [userRole, setUserRoles] = useState()
+    const [loadingEdit, setLoadingEdit] = useState(false)
+
+    useEffect(() => {
+        if (isEdit) {
+            setLoadingEdit(true)
+            api.get(`/api/colaborador/${idColaborador}`).then((res) => {
+                setUserRoles(res.data.role?.name)
+                setValue("nome", res.data.nome)
+                setValue("dataNascimento", formatarData(res.data.dataNascimento) as unknown as Date)
+                setValue("telefone", handlePhoneNumberEdit(res.data.telefone))
+                setValue("email", res.data.email)
+                setValue("profissao", res.data.profissao)
+                setValue("escolaridade", res.data.escolaridade)
+                setValue("redesSociais", res.data.redesSociais)
+                setValue("cep", res.data.cep)
+                setValue("rua", res.data.rua)
+                setValue("bairro", res.data.bairro)
+                setValue("numeroCasa", res.data.numeroCasa)
+                setValue("rg", res.data.rg)
+                setValue("orgaoExpedidor", res.data.orgaoExpedidor)
+                setValue("cpf", handleCPFEdit(res.data.cpf))
+                setValue("tituloEleitor", res.data.tituloEleitor)
+                setValue("secao", res.data.secao)
+                setValue("zona", res.data.zona)
+                setValue("faixaSalarial", res.data.faixaSalarial)
+                setValue("recebeBeneficio", res.data.recebeBeneficio)
+                setFaixaSalarialDefault(res.data.faixaSalarial)
+                setRecebeBeneficio(res.data.recebeBeneficio)
+                setShrinkEdit(true)
+                setLoadingEdit(false)
+            })
+        }
+    }, [])
+
     const handleCPF = (event: any) => {
         const { value } = event.target;
         const numericValue = value.replace(/\D/g, '');
@@ -222,35 +304,7 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
     }
 
 
-    useEffect(() => {
-        if (isEdit) {
-            api.get(`/api/colaborador/${idColaborador}`).then((res) => {
-                setValue("nome", res.data.nome)
-                setValue("dataNascimento", new Date(res.data.dataNascimento))
-                setValue("telefone", res.data.telefone)
-                setValue("email", res.data.email)
-                setValue("profissao", res.data.profissao)
-                setValue("escolaridade", res.data.escolaridade)
-                setValue("redesSociais", res.data.redesSociais)
-                setValue("cep", res.data.cep)
-                setValue("rua", res.data.rua)
-                setValue("bairro", res.data.bairro)
-                setValue("numeroCasa", res.data.numeroCasa)
-                setValue("rg", res.data.rg)
-                setValue("orgaoExpedidor", res.data.orgaoExpedidor)
-                setValue("cpf", res.data.cpf)
-                setValue("tituloEleitor", res.data.tituloEleitor)
-                setValue("secao", res.data.secao)
-                setValue("zona", res.data.zona)
-                setValue("faixaSalarial", res.data.faixaSalarial)
-                setValue("recebeBeneficio", res.data.recebeBeneficio)
-                setShrinkEdit(true)
-            })
-        }
-    }, [])
-
-
-    return (
+    return loadingEdit ? <Box sx={container}><CircularProgress /></Box> : (
         <Box sx={body}>
             <Box sx={container}>
                 <Typography variant="h2" component="h2" sx={title}>
@@ -338,6 +392,15 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
                             variant="filled"
                             sx={errors.redesSociais?.message ? inputError : input}
                         />
+                        <TextField
+                            label={errors.nomeMae?.message ?? "Nome da mãe"}
+                            {...register("nomeMae")}
+                            error={!!errors.nomeMae?.message}
+                            variant="filled"
+                            {...register}
+                            {...(shrinkEdit ? { InputLabelProps: { shrink: true } } : {})}
+                            sx={windowWidth < winSize ? errors.nomeMae?.message ? inputError : input : errors.nomeMae?.message ? inputError : { ...input, gridColumn: "1/3" }}
+                        />
                     </Box>
                     <Typography variant='h4' component="h4" sx={{ fontSize: "20px", color: "#202B71", fontWeight: 700, marginTop: 3 }}>
                         Endereço
@@ -414,9 +477,9 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
                             {...register("cpf")}
                             error={!!errors.cpf?.message}
                             {...(shrinkEdit ? { InputLabelProps: { shrink: true } } : {})}
-                            inputProps={{ maxLength: 14 }}
                             value={cpf}
                             onChange={(e) => handleCPF(e)}
+                            inputProps={{ maxLength: 14 }}
                             variant="filled"
                             sx={errors.cpf?.message ? inputError : input}
                         />
@@ -446,7 +509,7 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
                         />
                     </Box>
                     <Typography variant='h4' component="h4" sx={{ fontSize: "20px", color: "#202B71", fontWeight: 700, marginTop: 3 }}>
-                        Benefícios
+                        Faixa salarial
                     </Typography>
                     <Box sx={windowWidth < winSize ? inputGroupMobile : inputGroup1}>
                         <FormControl variant='filled'>
@@ -456,7 +519,7 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
                                 {...register("faixaSalarial")}
                                 error={!!errors.faixaSalarial?.message}
                                 sx={errors.faixaSalarial?.message ? inputError : { ...input, padding: 0 }}
-                                defaultValue={""}
+                                defaultValue={isEdit ? faixaSalarialDefault : ""}
                             >
                                 <MenuItem value={0}>Menos de 1 salário mínimo</MenuItem>
                                 <MenuItem value={1}>1 Salário mínimo</MenuItem>
@@ -468,35 +531,20 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
                                 <MenuItem value={7}>Mais de 6 salários mínimo</MenuItem>
                             </Select>
                         </FormControl>
-                        <Box sx={containerSelect}>
-                            <Typography>Recebe algum benefício?</Typography>
-                            <Typography sx={{ marginLeft: "20px", fontWeight: 700 }}>Não</Typography>
-                            <Switch
-                                {...register("recebeBeneficio")}
-                            />
-                            <Typography sx={{ fontWeight: 700 }}>Sim</Typography>
-                        </Box>
                     </Box>
                     <Typography variant='h4' component="h4" sx={{ fontSize: "20px", color: "#202B71", fontWeight: 700, marginTop: 3 }}>
-                        Líder
+                        Benefícios
                     </Typography>
-                    <Box sx={windowWidth < winSize ? inputGroupMobile : inputGroup1}>
-                        <FormControl variant='filled'>
-                            <InputLabel sx={errors.liderId?.message ? { color: "#d32f2f" } : { color: "#202B71" }}>{errors.liderId?.message ?? "Selecione um líder "}</InputLabel>
-                            <Select
-                                label={errors.liderId?.message ?? "Selecione um Líder"}
-                                {...register("liderId")}
-                                error={!!errors.liderId?.message}
-                                sx={errors.liderId?.message ? inputError : { ...input, padding: 0 }}
-                                defaultValue={""}
-                            >
-                                {lideres.map((lider: any) => (
-                                    <MenuItem value={lider.id}>{lider.nome}</MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
+                    <Box sx={containerSelect}>
+                        <Typography>Recebe algum benefício?</Typography>
+                        <Typography sx={{ marginLeft: "20px", fontWeight: 700 }}>Não</Typography>
+                        <Switch
+                            defaultChecked={recebeBeneficio}
+                            color='info'
+                            {...register("recebeBeneficio")}
+                        />
+                        <Typography sx={{ fontWeight: 700 }}>Sim</Typography>
                     </Box>
-
                     {isEdit &&
                         <>
                             <Typography variant='h4' component="h4" sx={{ fontSize: "20px", color: "#202B71", fontWeight: 700, marginTop: 3 }}>
@@ -506,6 +554,7 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
                                 <FormControl variant='filled'>
                                     <InputLabel sx={{ color: "#202B71" }}>{errors.faixaSalarial?.message ?? "Perfil"}</InputLabel>
                                     <Select
+                                        defaultValue={userRole}
                                         onChange={(event) => {
                                             api.put(`api/colaborador/role/${idColaborador}?tipo=${event.target.value}`).then((res) => {
                                                 toast.success("Perfil do colaborador editado com sucesso!")
@@ -547,4 +596,4 @@ function FormColaboratorRegister({ handleCloseModal, isEdit, idColaborador, hand
     );
 }
 
-export default FormColaboratorRegister;
+export default FormColaborator;
