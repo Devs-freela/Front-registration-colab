@@ -27,6 +27,7 @@ const schema = Yup.object().shape({
     rua: Yup.string().required('Rua é obrigatório'),
     bairro: Yup.string().required('Bairro é obrigatório'),
     numeroCasa: Yup.string().required('Número é obrigatório'),
+    complemento: Yup.string().required('Complemento é obrigatório'),
     rg: Yup.string().required('RG é obrigatório'),
     orgaoExpedidor: Yup.string().required('Orgão expeditor é obrigatório'),
     cpf: Yup.string().length(14, 'CPF deve conter 11 dígitos numéricos').required('CPF é obrigatório'),
@@ -35,7 +36,8 @@ const schema = Yup.object().shape({
     secao: Yup.string().required('Sessão é obrigatório'),
     faixaSalarial: Yup.number().required('Salário mínimo é obrigatório').typeError('Salário mínimo é obrigatório'),
     recebeBeneficio: Yup.boolean(),
-    nomeMae: Yup.string().required('O nome da mãe é obrigatório')
+    nomeMae: Yup.string().required('O nome da mãe é obrigatório'),
+    nomePai: Yup.string().required('O nome do pai é obrigatório')
 });
 
 interface props {
@@ -229,9 +231,11 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
 
 
     const [faixaSalarialDefault, setFaixaSalarialDefault] = useState<number>()
+    const [escolaridadeDefault, setEscolaridadeDefault] = useState<number>()
     const [recebeBeneficio, setRecebeBeneficio] = useState(false)
     const [userRole, setUserRoles] = useState()
     const [loadingEdit, setLoadingEdit] = useState(false)
+
     useEffect(() => {
         if (isEdit) {
             setLoadingEdit(true)
@@ -244,10 +248,13 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                 setValue("profissao", res.data.profissao)
                 setValue("escolaridade", res.data.escolaridade)
                 setValue("redesSociais", res.data.redesSociais)
+                setValue("nomeMae", res.data.nomeMae)
+                setValue("nomePai", res.data.nomePai)
                 setValue("cep", res.data.cep)
                 setValue("rua", res.data.rua)
                 setValue("bairro", res.data.bairro)
                 setValue("numeroCasa", res.data.numeroCasa)
+                setValue("complemento", res.data.complemento)
                 setValue("rg", res.data.rg)
                 setValue("orgaoExpedidor", res.data.orgaoExpedidor)
                 setValue("cpf", handleCPFEdit(res.data.cpf))
@@ -257,6 +264,7 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                 setValue("faixaSalarial", res.data.faixaSalarial)
                 setValue("recebeBeneficio", res.data.recebeBeneficio)
                 setFaixaSalarialDefault(res.data.faixaSalarial)
+                setEscolaridadeDefault(res.data.escolaridade)
                 setRecebeBeneficio(res.data.recebeBeneficio)
                 setShrinkEdit(true)
                 setLoadingEdit(false)
@@ -375,23 +383,35 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                             variant="filled"
                             sx={errors.profissao?.message ? inputError : input}
                         />
+                        <FormControl variant='filled'>
+                            <InputLabel sx={errors.escolaridade?.message ? { color: "#d32f2f" } : { color: "#202B71" }}>{errors.escolaridade?.message ?? "Escolaridade"}</InputLabel>
+                            <Select
+                                label={errors.escolaridade?.message ?? "Escolaridade"}
+                                {...register("escolaridade")}
+                                error={!!errors.escolaridade?.message}
+                                sx={errors.escolaridade?.message ? inputError : { ...input, padding: 0 }}
+                                defaultValue={isEdit ? escolaridadeDefault : ""}
+                            >
+                                <MenuItem value={0}>Ensino fundamental incompleto</MenuItem>
+                                <MenuItem value={1}>Ensino fundamental completo</MenuItem>
+                                <MenuItem value={2}>Ensino médio incompleto</MenuItem>
+                                <MenuItem value={3}>Ensino médio completo</MenuItem>
+                                <MenuItem value={4}>Superior incompleto</MenuItem>
+                                <MenuItem value={5}>Superior completo</MenuItem>
+                            </Select>
+                        </FormControl>
                         <TextField
-                            label={errors.escolaridade?.message ?? "Escolaridade"}
-                            {...register("escolaridade")}
-                            error={!!errors.escolaridade?.message}
-                            {...(shrinkEdit ? { InputLabelProps: { shrink: true } } : {})}
-                            variant="filled"
-                            sx={errors.escolaridade?.message ? inputError : input}
-                        />
-                        <TextField
-                            label={errors.redesSociais?.message ?? "Rede Social"}
+                            label={errors.redesSociais?.message ?? "Instagram"}
                             {...register("redesSociais")}
                             error={!!errors.redesSociais?.message}
                             {...(shrinkEdit ? { InputLabelProps: { shrink: true } } : {})}
                             variant="filled"
                             sx={errors.redesSociais?.message ? inputError : input}
                         />
+                    </Box>
+                    <Box sx={{ display: 'flex', gap: 2, marginTop: 3 }}>
                         <TextField
+                            fullWidth
                             label={errors.nomeMae?.message ?? "Nome da mãe"}
                             {...register("nomeMae")}
                             error={!!errors.nomeMae?.message}
@@ -399,6 +419,16 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                             {...register}
                             {...(shrinkEdit ? { InputLabelProps: { shrink: true } } : {})}
                             sx={windowWidth < winSize ? errors.nomeMae?.message ? inputError : input : errors.nomeMae?.message ? inputError : { ...input, gridColumn: "1/3" }}
+                        />
+                        <TextField
+                            fullWidth
+                            label={errors.nomePai?.message ?? "Nome do pai"}
+                            {...register("nomePai")}
+                            error={!!errors.nomePai?.message}
+                            variant="filled"
+                            {...register}
+                            {...(shrinkEdit ? { InputLabelProps: { shrink: true } } : {})}
+                            sx={windowWidth < winSize ? errors.nomePai?.message ? inputError : input : errors.nomePai?.message ? inputError : { ...input, gridColumn: "1/3" }}
                         />
                     </Box>
                     <Typography variant='h4' component="h4" sx={{ fontSize: "20px", color: "#202B71", fontWeight: 700, marginTop: 3 }}>
@@ -449,6 +479,17 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                             {...(shrinkEdit ? { InputLabelProps: { shrink: true } } : {})}
                             variant="filled"
                             sx={errors.numeroCasa?.message ? inputError : input}
+                        />
+                    </Box>
+                    <Box sx={{ marginTop: 3 }}>
+                        <TextField
+                            fullWidth
+                            label={errors.complemento?.message ?? "Complemento"}
+                            {...register("complemento")}
+                            error={!!errors.complemento?.message}
+                            {...(shrinkEdit ? { InputLabelProps: { shrink: true } } : {})}
+                            variant="filled"
+                            sx={errors.complemento?.message ? inputError : input}
                         />
                     </Box>
                     <Typography variant='h4' component="h4" sx={{ fontSize: "20px", color: "#202B71", fontWeight: 700, marginTop: 3 }}>

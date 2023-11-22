@@ -185,7 +185,7 @@ export function Lideres() {
                 columns={columns}
                 onEdit={() => { }}
                 isLoading={isLoading}
-                onDeleteLider={() => { }}
+                onDeleteLider={handleAtt}
                 handleOpenHistory={handleOpenModalHistory}
                 history
                 handleOpenModalEdit={handleOpenModalEdit}

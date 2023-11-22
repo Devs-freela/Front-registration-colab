@@ -148,6 +148,7 @@ export function Colaborador() {
         setRowsFiltered([])
     }
 
+
     return (
         <>
             <Box sx={windowWidth > 600 ? { display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3, mt: 2 } : { display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3, mt: 2, flexDirection: "column" }}>
@@ -207,7 +208,7 @@ export function Colaborador() {
                 columns={columns}
                 handleOpenModalEdit={handleOpenModalEdit}
                 onEdit={() => { }}
-                onDelete={() => { }}
+                onDelete={handleAtt}
                 setColaboradorId={setColaboradorId}
                 handleAttReq={handleAtt}
                 setSkip={setSkip}

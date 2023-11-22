@@ -182,7 +182,7 @@ export function Bairros() {
                 columns={columns}
                 handleOpenModalEdit={handleOpenModalEdit}
                 onEdit={() => { }}
-                onDeleteBairro={() => { }}
+                onDeleteBairro={handleAtt}
                 setColaboradorId={setBairroId}
                 handleAttReq={handleAtt}
                 isLoading={isLoading}

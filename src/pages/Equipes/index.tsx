@@ -16,6 +16,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { button, buttonMobile, input, inputError } from "../../components/FormColaborador/styles/AppStyles";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from '@mui/icons-material/Edit';
+import { ModalDelete } from "../../components/ModalDelete";
 
 
 const schema = Yup.object().shape({
@@ -361,17 +362,9 @@ export function Equipes() {
                                                             }>
                                                             <EditIcon />
                                                         </IconButton>
-                                                        <IconButton
-                                                            sx={{ marginRight: "50px" }}
-                                                            onClick={() => {
-                                                                api.delete(`api/equipe/${row.id}`).then((res) => {
-                                                                    toast.success("Equipe deletada com sucesso!")
-                                                                    setAttReq(attReq + 1)
-                                                                }).catch((err) => toast.error(err.response.data.message))
-                                                            }
-                                                            }>
-                                                            <DeleteIcon />
-                                                        </IconButton>
+                                                        <ModalDelete id={row.id} handleAtt={handleAtt} onDeleteEquipe={true} />
+
+
                                                     </Box>
                                                 </Box>
                                             </AccordionSummary>
@@ -431,17 +424,8 @@ export function Equipes() {
                                                             }>
                                                             <EditIcon />
                                                         </IconButton>
-                                                        <IconButton
-                                                            sx={{ marginRight: "50px" }}
-                                                            onClick={() => {
-                                                                api.delete(`api/equipe/${row.id}`).then((res) => {
-                                                                    toast.success("Equipe deletada com sucesso!")
-                                                                    setAttReq(attReq + 1)
-                                                                }).catch((err) => toast.error(err.response.data.message))
-                                                            }
-                                                            }>
-                                                            <DeleteIcon />
-                                                        </IconButton>
+                                                        <ModalDelete id={row.id} handleAtt={handleAtt} onDeleteEquipe={true} />
+
                                                     </Box>
                                                 </Box>
                                             </AccordionSummary>

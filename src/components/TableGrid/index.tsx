@@ -3,15 +3,13 @@ import { IconButton, useMediaQuery } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { table, tableContainer } from './styles';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { api } from '../../utils/api';
-import { toast } from 'react-toastify';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { ModalDelete } from '../ModalDelete';
 
 interface TableGridProps {
   rows: any[];
   columns: GridColDef[];
-  onDelete?: (id: string) => void;
+  onDelete?: () => void;
   onEdit?: (id: string) => void;
   onView?: (id: string) => void;
   titleDelete?: string;
@@ -71,46 +69,23 @@ export function TableGrid(props: TableGridProps) {
             </IconButton>
           }
           {
-            props.onDelete && <IconButton
-              onClick={() => {
-                api.delete(`api/colaborador/${row.id}`).then((res) => {
-                  toast.success("Colaborador deletado com sucesso!.")
-                  if (props.handleAttReq) {
-                    props.handleAttReq()
-                  }
-                }).catch((err) => toast.error(err.response.data.message))
-              }
-              }>
-              <DeleteIcon />
-            </IconButton>
+            props.onDelete && <ModalDelete
+              id={row.id}
+              handleAtt={props.onDelete}
+            ></ModalDelete>
           }
           {
-            props.onDeleteBairro && <IconButton
-              onClick={() => {
-                api.delete(`api/bairro/${row.id}`).then((res) => {
-                  toast.success("Bairro deletado com sucesso!.")
-                  if (props.handleAttReq) {
-                    props.handleAttReq()
-                  }
-                }).catch((err) => toast.error(err.response.data.message))
-              }
-              }>
-              <DeleteIcon />
-            </IconButton>
+            props.onDeleteBairro && <ModalDelete
+              id={row.id}
+              handleAtt={props.onDeleteBairro}
+              onDeleteBairro={true}
+            ></ModalDelete>
           }
           {
-            props.onDeleteLider && <IconButton
-              onClick={() => {
-                api.delete(`api/lider/${row.id}`).then((res) => {
-                  toast.success("Líder deletado com sucesso!.")
-                  if (props.handleAttReq) {
-                    props.handleAttReq()
-                  }
-                }).catch((err) => toast.error(err.response.data.message))
-              }
-              }>
-              <DeleteIcon />
-            </IconButton>
+            props.onDeleteLider && <ModalDelete
+              id={row.id}
+              handleAtt={props.onDeleteLider}
+            ></ModalDelete>
           }
         </>
       ),

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Box, Button, FilledInput, FormControl, IconButton, InputAdornment, InputLabel, TextField, Typography } from "@mui/material"
-import { LoginProps } from "./interfacesLogin"
 import { api } from "../../utils/api"
 import { colors } from "../../shared/themes"
 import { containerCardLogin, containerMain } from "./styles"
