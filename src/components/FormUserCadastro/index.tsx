@@ -36,8 +36,8 @@ const schema = Yup.object().shape({
     faixaSalarial: Yup.number().required('Salário mínimo é obrigatório').typeError('Salário mínimo é obrigatório'),
     recebeBeneficio: Yup.boolean(),
     nomeMae: Yup.string().required('O nome da mãe é obrigatório'),
-    nomePai: Yup.string().required('O nome da pai é obrigatório'),
-    complemento: Yup.string().required('Complemento é obrigatório')
+    nomePai: Yup.string(),
+    complemento: Yup.string()
 });
 
 interface props {
@@ -407,28 +407,28 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                             variant="filled"
                             sx={errors.redesSociais?.message ? inputError : input}
                         />
-                        <Box sx={{ display: 'flex', gap: 2, marginTop: 3 }}>
-                            <TextField
-                                fullWidth
-                                label={errors.nomeMae?.message ?? "Nome da mãe"}
-                                {...register("nomeMae")}
-                                error={!!errors.nomeMae?.message}
-                                variant="filled"
-                                {...register}
-                                {...(shrinkEdit ? { InputLabelProps: { shrink: true } } : {})}
-                                sx={windowWidth < winSize ? errors.nomeMae?.message ? inputError : input : errors.nomeMae?.message ? inputError : { ...input, gridColumn: "1/3" }}
-                            />
-                            <TextField
-                                fullWidth
-                                label={errors.nomePai?.message ?? "Nome do pai"}
-                                {...register("nomePai")}
-                                error={!!errors.nomePai?.message}
-                                variant="filled"
-                                {...register}
-                                {...(shrinkEdit ? { InputLabelProps: { shrink: true } } : {})}
-                                sx={windowWidth < winSize ? errors.nomePai?.message ? inputError : input : errors.nomePai?.message ? inputError : { ...input, gridColumn: "1/3" }}
-                            />
-                        </Box>
+                    </Box>
+                    <Box sx={{ display: 'flex', gap: 2, marginTop: 3 }}>
+                        <TextField
+                            fullWidth
+                            label={errors.nomeMae?.message ?? "Nome da mãe"}
+                            {...register("nomeMae")}
+                            error={!!errors.nomeMae?.message}
+                            variant="filled"
+                            {...register}
+                            {...(shrinkEdit ? { InputLabelProps: { shrink: true } } : {})}
+                            sx={windowWidth < winSize ? errors.nomeMae?.message ? inputError : input : errors.nomeMae?.message ? inputError : { ...input, gridColumn: "1/3" }}
+                        />
+                        <TextField
+                            fullWidth
+                            label={errors.nomePai?.message ?? "Nome do pai"}
+                            {...register("nomePai")}
+                            error={!!errors.nomePai?.message}
+                            variant="filled"
+                            {...register}
+                            {...(shrinkEdit ? { InputLabelProps: { shrink: true } } : {})}
+                            sx={windowWidth < winSize ? errors.nomePai?.message ? inputError : input : errors.nomePai?.message ? inputError : { ...input, gridColumn: "1/3" }}
+                        />
                     </Box>
                     <Typography variant='h4' component="h4" sx={{ fontSize: "20px", color: "#202B71", fontWeight: 700, marginTop: 3 }}>
                         Endereço

@@ -37,7 +37,7 @@ const schema = Yup.object().shape({
     faixaSalarial: Yup.number().required('Salário mínimo é obrigatório').typeError('Salário mínimo é obrigatório'),
     recebeBeneficio: Yup.boolean(),
     nomeMae: Yup.string().required('O nome da mãe é obrigatório'),
-    nomePai: Yup.string().required('O nome do pai é obrigatório')
+    nomePai: Yup.string()
 });
 
 interface props {
