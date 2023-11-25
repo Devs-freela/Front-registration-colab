@@ -17,23 +17,23 @@ import { calculateAge } from '../FormColaborador/utils/calculateAge';
 const schema = Yup.object().shape({
     nome: Yup.string().required('O nome é obrigatório'),
     dataNascimento: Yup.date().required('A data de nascimento é obrigatória').typeError('A data de nascimento é obrigatória'),
-    idade: Yup.number().required('A idade é obrigatória').typeError('A idade é obrigatória'),
+    idade: Yup.number(),
     telefone: Yup.string().required('O telefone é obrigatório').length(15, 'Telefone deve conter 11 dígitos numéricos'),
     email: Yup.string().email('Digite um email válido').required('O email é obrigatório'),
-    profissao: Yup.string().required('Profissão é obrigatório'),
-    escolaridade: Yup.string().required('Escolaridade é obrigatório'),
+    profissao: Yup.string(),
+    escolaridade: Yup.string(),
     redesSociais: Yup.string().required('Rede social é obrigatório'),
-    cep: Yup.string().required('Cep é obrigatório'),
-    rua: Yup.string().required('Rua é obrigatório'),
-    bairro: Yup.string().required('Bairro é obrigatório'),
-    numeroCasa: Yup.string().required('Número é obrigatório'),
-    rg: Yup.string().required('RG é obrigatório'),
-    orgaoExpedidor: Yup.string().required('Orgão expeditor é obrigatório'),
+    cep: Yup.string(),
+    rua: Yup.string(),
+    bairro: Yup.string(),
+    numeroCasa: Yup.string(),
+    rg: Yup.string(),
+    orgaoExpedidor: Yup.string(),
     cpf: Yup.string().length(14, 'CPF deve conter 11 dígitos numéricos').required('CPF é obrigatório'),
-    tituloEleitor: Yup.string().required('Título de eleitor é obrigatório'),
-    zona: Yup.string().required('Zona eleitoral é obrigatório'),
-    secao: Yup.string().required('Sessão é obrigatório'),
-    faixaSalarial: Yup.number().required('Salário mínimo é obrigatório').typeError('Salário mínimo é obrigatório'),
+    tituloEleitor: Yup.string(),
+    zona: Yup.string(),
+    secao: Yup.string(),
+    faixaSalarial: Yup.number(),
     recebeBeneficio: Yup.boolean(),
     nomeMae: Yup.string().required('O nome da mãe é obrigatório'),
     nomePai: Yup.string(),
@@ -562,12 +562,12 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                             >
                                 <MenuItem value={0}>Menos de 1 salário mínimo</MenuItem>
                                 <MenuItem value={1}>1 Salário mínimo</MenuItem>
-                                <MenuItem value={2}>2 Salários mínimo</MenuItem>
-                                <MenuItem value={3}>3 Salários mínimo</MenuItem>
-                                <MenuItem value={4}>4 Salários mínimo</MenuItem>
-                                <MenuItem value={5}>5 Salários mínimo</MenuItem>
-                                <MenuItem value={6}>6 Salários mínimo</MenuItem>
-                                <MenuItem value={7}>Mais de 6 salários mínimo</MenuItem>
+                                <MenuItem value={2}>2 Salários mínimos</MenuItem>
+                                <MenuItem value={3}>3 Salários mínimos</MenuItem>
+                                <MenuItem value={4}>4 Salários mínimos</MenuItem>
+                                <MenuItem value={5}>5 Salários mínimos</MenuItem>
+                                <MenuItem value={6}>6 Salários mínimos</MenuItem>
+                                <MenuItem value={7}>Mais de 6 salários mínimos</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>
