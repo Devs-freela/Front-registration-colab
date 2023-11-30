@@ -159,9 +159,9 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
     }, [dataNascimentoListenner])
 
     useEffect(() => {
-        if (cepListenner?.length === 8 && !isEdit) {
+        if (cepListenner?.length === 9 && !isEdit) {
             setCeploading(true)
-            axios.get(`https://brasilapi.com.br/api/cep/v2/${cepListenner}`, {
+            axios.get(`https://brasilapi.com.br/api/cep/v1/${cepListenner}`, {
             }).then((res) => {
                 setValue("rua", res.data.street)
                 setValue("bairro", res.data.neighborhood)
@@ -227,6 +227,18 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
 
         setPhoneNumber(formattedPhoneNumber)
         return formattedPhoneNumber
+    }
+
+    const handleCEP = (event: any) => {
+        const { value } = event.target;
+        const numericValue = value.replace(/\D/g, '');
+
+        let formattedCEP = numericValue;
+        if (numericValue.length > 5) {
+            formattedCEP = `${numericValue.slice(0, 5)}-${numericValue.slice(5)}`;
+        }
+
+        setValue('cep', formattedCEP);
     }
 
 
@@ -440,6 +452,7 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                             error={!!errors.cep?.message}
                             {...(shrinkEdit ? { InputLabelProps: { shrink: true } } : {})}
                             variant="filled"
+                            onChange={(e) => handleCEP(e)}
                             sx={windowWidth < winSize ? errors.cep?.message ? inputError : input : errors.cep?.message ? inputError : input}
                         />
                         {cepLoading ?
