@@ -5,6 +5,7 @@ import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { table, tableContainer } from './styles';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { ModalDelete } from '../ModalDelete';
+import { ModalResetSenha } from '../ModalResetSenha';
 
 interface TableGridProps {
   rows: any[];
@@ -24,6 +25,7 @@ interface TableGridProps {
   isLoading?: boolean
   onDeleteBairro?: () => void
   onDeleteLider?: () => void
+  onReset?: () => void
 }
 export function TableGrid(props: TableGridProps) {
   let actionColumn: GridColDef[] = [
@@ -86,6 +88,12 @@ export function TableGrid(props: TableGridProps) {
               id={row.id}
               handleAtt={props.onDeleteLider}
             ></ModalDelete>
+          }
+          {
+            props.onReset && <ModalResetSenha
+              id={row.id}
+
+            ></ModalResetSenha>
           }
         </>
       ),

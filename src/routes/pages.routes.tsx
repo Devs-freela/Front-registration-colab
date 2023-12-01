@@ -78,23 +78,5 @@ export const APP_PAGES = () => {
         }, 1000)
     }
 
-    // if (process.env.NODE_ENV == "development") {
-    //     menuItems = menuItems.map((item) => ({ ...item, showMenu: true }))
-    // }
-
-    // if (process.env.NODE_ENV != "development") {
-    //     if (User_Access === "Lider") {
-    //         return menuItems = menuItems.map(item => ({
-    //             ...item,
-    //             showMenu: item.title == "Links",
-    //         }));
-    //     } else if (User_Access === "Colaborador-Cadastro") {
-    //         menuItems = menuItems.map(item => ({
-    //             ...item,
-    //             showMenu: item.title === 'Colaborador' || item.title === 'Lideres',
-    //         }));
-    //     }
-    // }
-
     return menuItems
 } 

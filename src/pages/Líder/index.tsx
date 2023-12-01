@@ -35,6 +35,7 @@ export function Lideres() {
     }, [])
 
     useEffect(() => {
+
         if (attReq !== 0)
             setIsLoading(true)
         api.get("api/lider").then((res) => {
@@ -190,6 +191,7 @@ export function Lideres() {
                 history
                 handleOpenModalEdit={handleOpenModalEdit}
                 setColaboradorId={setLiderId}
+                onReset={() => { }}
             />
             <Dialog open={openModalEdit} onClose={handleCloseModalEdit} maxWidth={"lg"}>
                 <FormColaborator handleCloseModal={handleCloseModalEdit} isEdit={true} idColaborador={liderId} closeModal={handleCloseModalEdit} handleAtt={handleAtt} />

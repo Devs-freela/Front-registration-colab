@@ -200,6 +200,7 @@ export function UserCadastro() {
                 setSkip={setSkip}
                 totalRows={totalRows}
                 isLoading={isLoading}
+                onReset={() => { }}
             />
             <Dialog open={openModal} onClose={handleCloseModal} maxWidth={"lg"}>
                 <FormColaborator handleCloseModal={handleCloseModal} handleAtt={handleAtt} closeModal={handleCloseModal} />
