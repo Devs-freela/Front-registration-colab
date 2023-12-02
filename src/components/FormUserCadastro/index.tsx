@@ -37,7 +37,8 @@ const schema = Yup.object().shape({
     recebeBeneficio: Yup.boolean(),
     nomeMae: Yup.string().required('O nome da mãe é obrigatório'),
     nomePai: Yup.string(),
-    complemento: Yup.string()
+    complemento: Yup.string(),
+    liderId: Yup.string().required('Líder é obrigatório')
 });
 
 interface props {
@@ -60,6 +61,7 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
     const [shrinkEdit, setShrinkEdit] = useState(false)
     const [cpf, setCpf] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [lideres, setLideres] = useState([])
 
 
     window.addEventListener("resize", () => setWindowWidth(window.innerWidth))
@@ -155,6 +157,7 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
             setAgeSetted(true)
             setValue("idade", age)
         }
+        api.get("api/lider").then((res: any) => setLideres(res.data))
 
     }, [dataNascimentoListenner])
 
@@ -597,6 +600,23 @@ function FormColaborator({ handleCloseModal, isEdit, idColaborador, handleAtt, c
                         />
                         <Typography sx={{ fontWeight: 700 }}>Sim</Typography>
                     </Box>
+                    <Typography variant='h4' component="h4" sx={{ fontSize: "20px", color: "#202B71", fontWeight: 700, marginTop: 3, marginBottom: 3 }}>
+                        Líder
+                    </Typography>
+                    <FormControl fullWidth variant='filled'>
+                        <InputLabel sx={errors.liderId?.message ? { color: "#d32f2f" } : { color: "#202B71" }}>{errors.liderId?.message ?? "Selecione um líder "}</InputLabel>
+                        <Select
+                            label={errors.liderId?.message ?? "Selecione um Líder"}
+                            {...register("liderId")}
+                            error={!!errors.liderId?.message}
+                            sx={errors.liderId?.message ? inputError : { ...input, padding: 0 }}
+                            defaultValue={""}
+                        >
+                            {lideres.map((lider: any) => (
+                                <MenuItem value={lider.id}>{lider.nome}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                     {isEdit &&
                         <>
                             <Typography variant='h4' component="h4" sx={{ fontSize: "20px", color: "#202B71", fontWeight: 700, marginTop: 3 }}>
