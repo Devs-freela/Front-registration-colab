@@ -1,11 +1,12 @@
 import EditIcon from '@mui/icons-material/Edit';
-import { IconButton, useMediaQuery } from '@mui/material';
+import { Button, IconButton, useMediaQuery } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid, GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { table, tableContainer } from './styles';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { ModalDelete } from '../ModalDelete';
 import { ModalResetSenha } from '../ModalResetSenha';
+import { colors } from '../../shared/themes';
 
 interface TableGridProps {
   rows: any[];
@@ -39,13 +40,13 @@ export function TableGrid(props: TableGridProps) {
         <>
           {
             props.history &&
-            <IconButton onClick={() => {
+            <Button variant="contained" size="small" sx={{ background: colors.primary_dark }} onClick={() => {
               if (props.handleOpenHistory) {
                 props.handleOpenHistory(row.id)
               }
-            }}>
-              <VisibilityIcon />
-            </IconButton>
+            }} startIcon={<VisibilityIcon />}>
+              {row.reccount}
+            </Button>
           }
         </>
       )

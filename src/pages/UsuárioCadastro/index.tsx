@@ -129,7 +129,7 @@ export function UserCadastro() {
                 const blob = new Blob([res.data])
                 // setFetchFile(false)
                 saveAs(blob, `colaboradores_${new Date().toLocaleDateString()}.xlsx`)
-                toast.success("Arquivo esportado com sucesso")
+                toast.success("Arquivo exportado com sucesso")
             }).catch((err) => {
                 // setFetchFile(false)
                 toast.error(err.response.data.message)
